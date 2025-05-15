@@ -10,15 +10,28 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary-color: #4caf50;
+  --primary-dark: #2e7d32;
+  --primary-light: #c8e6c9;
+  --accent-color: #8bc34a;
+  --background-light: #f0ffe0;
+  --text-on-primary: white;
+  --text-primary: #2e7d32;
+  --text-secondary: #558b2f;
+}
+
 html, body { 
   height: 100%; 
   overflow: hidden;
+  background-color: var(--background-light);
 }
 
 body { 
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif;
   line-height: 1.4;
+  color: #333;
 }
 
 // Angular Component styles

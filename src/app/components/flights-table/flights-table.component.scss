@@ -15,11 +15,11 @@
     border-radius: get-rem(16);
     box-shadow: 0 get-rem(4) get-rem(12) rgba(0, 0, 0, 0.12);
     margin: 0;
-    background-color: #f8f9fd;
+    background-color: #f0ffe0;
   }
 
   mat-card-header {
-    background: linear-gradient(45deg, #1a237e, #283593);
+    background: linear-gradient(45deg, #2e7d32, #4caf50);
     color: white;
     padding: get-rem(12) get-rem(16);
     border-radius: get-rem(8) get-rem(8) 0 0;
@@ -56,7 +56,7 @@
     display: flex;
     flex-direction: column;
     padding: get-rem(12);
-    background-color: #f8f9fd;
+    background-color: #f0ffe0;
   }
 
   .error-message {
@@ -231,9 +231,9 @@
       }
 
       &.selected-row {
-        background-color: #e8f0fe;
+        background-color: #e8f5e9;
         position: relative;
-        border-left: get-rem(4) solid #4285f4;
+        border-left: get-rem(4) solid #4caf50;
 
         td {
           color: #1a237e;

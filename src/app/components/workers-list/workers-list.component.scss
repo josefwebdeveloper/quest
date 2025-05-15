@@ -4,7 +4,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #f5f7fa;
+  background-color: #f0ffe0;
   overflow: hidden;
 
   .header {
@@ -18,14 +18,14 @@
     
     h2 {
       margin: 0;
-      color: #3f51b5;
+      color: #2e7d32;
       font-size: get-rem(16);
       font-weight: 500;
     }
     
     .workers-count {
       .counter {
-        background-color: #3f51b5;
+        background-color: #4caf50;
         color: white;
         border-radius: 50%;
         width: get-rem(24);
@@ -129,18 +129,18 @@
       }
 
       &.selected {
-        background-color: #e8eaf6;
-        border-left: get-rem(3) solid #3f51b5;
+        background-color: #e8f5e9;
+        border-left: get-rem(3) solid #4caf50;
         padding-left: get-rem(9);
         
         .worker-avatar {
-          background-color: #3f51b5;
+          background-color: #4caf50;
           color: white;
         }
         
         .worker-name {
           font-weight: 500;
-          color: #3f51b5;
+          color: #2e7d32;
         }
       }
       
@@ -148,8 +148,8 @@
         width: get-rem(28);
         height: get-rem(28);
         border-radius: 50%;
-        background-color: #c5cae9;
-        color: #3f51b5;
+        background-color: #c8e6c9;
+        color: #2e7d32;
         display: flex;
         align-items: center;
         justify-content: center;

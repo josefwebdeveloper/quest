@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #fafafa;
+  background-color: #f5fff0;
   border-left: get-rem(1) solid #e0e0e0;
 
   .header {
@@ -21,11 +21,11 @@
       margin: 0;
       font-size: get-rem(16);
       font-weight: 500;
-      color: #3f51b5;
+      color: #2e7d32;
     }
     
     .flight-badge {
-      background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
       color: white;
       padding: get-rem(4) get-rem(10);
       border-radius: get-rem(16);
@@ -97,9 +97,9 @@
       .duration-indicator {
         text-align: center;
         padding: get-rem(12) get-rem(16);
-        background-color: #e8eaf6;
+        background-color: #e8f5e9;
         border-radius: get-rem(8);
-        color: #3f51b5;
+        color: #2e7d32;
         
         .duration-value {
           font-size: get-rem(20);
@@ -111,7 +111,7 @@
           text-transform: uppercase;
           letter-spacing: get-rem(0.5);
           margin-top: get-rem(4);
-          color: #7986cb;
+          color: #4caf50;
         }
       }
     }
@@ -157,7 +157,7 @@
       
       .path-line {
         height: get-rem(2);
-        background: linear-gradient(to right, #bbdefb, #64b5f6);
+        background: linear-gradient(to right, #c8e6c9, #4caf50);
         width: 80%;
         position: relative;
       }
