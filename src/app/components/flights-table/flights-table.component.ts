@@ -175,6 +175,9 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     effect(() => {
       const selectedWorker = this.flightService.selectedWorker();
       if (selectedWorker) {
+        // Clear any cached data for this worker to ensure fresh data
+        this.flightsCache.delete(selectedWorker.id);
+        this.flightService.clearFlightsCache(selectedWorker.id);
         this.loadFlights(selectedWorker.id);
         this.startRefreshTimer();
       } else {
@@ -199,28 +202,11 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   
   loadFlights(workerId: number): void {
+    // Always make a new API call, ignore cache
     const currentTime = Date.now();
-    const cachedData = this.flightsCache.get(workerId);
-    const lastFetch = this.lastFetchTime.get(workerId) || 0;
     
-    // Show local loader
+    // Show both loaders
     this.isLoading.set(true);
-    
-    // Use cached data if it exists and isn't expired
-    if (cachedData) {
-      console.log('Using cached flight data');
-      
-      if (!this.haveFlightsChanged(cachedData, this.flights())) {
-        console.log('Cached data matches current data, no UI update needed');
-        this.isLoading.set(false);
-        return;
-      }
-      
-      this.updateFlightsDisplay(cachedData);
-      return;
-    }
-    
-    // Show global loader only for actual API calls
     this.loaderService.show();
     console.log(`Loading flights for worker ${workerId}`);
     
