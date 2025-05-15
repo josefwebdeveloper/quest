@@ -40,7 +40,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
           // Convert to number as route params are strings
           const id = parseInt(workerId, 10);
           
-          // Check if we already have loaded workers
+          // We don't need to load workers here because WorkersListComponent will handle it
+          // Just check workers if they're already loaded
           if (this.flightService.hasWorkersLoaded()) {
             const worker = this.flightService.getWorkerById(id);
             if (worker) {
@@ -49,24 +50,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
               // If worker not found, redirect to home page
               this.router.navigate(['/']);
             }
-          } else {
-            // Load workers data first, then select the worker
-            this.flightService.getWorkers()
-              .pipe(takeUntil(this.destroy$))
-              .subscribe({
-                next: (workers) => {
-                  const worker = this.flightService.getWorkerById(id);
-                  if (worker) {
-                    this.flightService.setSelectedWorker(worker);
-                  } else {
-                    // If worker not found, redirect to home
-                    this.router.navigate(['/']);
-                  }
-                },
-                error: (err) => {
-                  console.error('Failed to load workers:', err);
-                }
-              });
           }
         }
       });

@@ -4,7 +4,6 @@ import { Observable, catchError, map, tap, of, shareReplay } from 'rxjs';
 import { Worker } from '../models/worker.model';
 import { Flight } from '../models/flight.model';
 import { ErrorHandlerService } from './error-handler.service';
-import { MockDataService } from './mock-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +11,6 @@ import { MockDataService } from './mock-data.service';
 export class FlightService {
   private http = inject(HttpClient);
   private errorHandler = inject(ErrorHandlerService);
-  private mockDataService = inject(MockDataService);
-  
-  // Flag to use mock data instead of API
-  private useMockData = false;
   
   // Proxied endpoints to avoid CORS
   private workersUrl = '/api/workers';
@@ -39,23 +34,10 @@ export class FlightService {
   
   // Cache for recent API responses
   private flightsCache = new Map<number, {data: Flight[], timestamp: number}>();
-  private readonly CACHE_TTL = 30 * 1000; // 30 seconds cache TTL (was 5 minutes)
-
+  private readonly CACHE_TTL = 30 * 1000; // 30 seconds cache TTL
+  
   getWorkers(): Observable<Worker[]> {
     this.errorMessage.set(null);
-    
-    if (this.useMockData) {
-      // Generate 40 mock workers for testing scrolling
-      const mockWorkers = this.mockDataService.getMockWorkers(40);
-      
-      // Simulate network delay
-      return of(mockWorkers).pipe(
-        tap(workers => {
-          this.workers.set(workers);
-          this.workersLoaded.set(true);
-        })
-      );
-    }
     
     return this.http.get<Worker[]>(this.workersUrl)
       .pipe(
@@ -89,17 +71,6 @@ export class FlightService {
     if (existingRequest) {
       console.log(`Reusing in-flight request for worker ${workerId}`);
       return existingRequest;
-    }
-    
-    if (this.useMockData) {
-      // Generate 50 mock flights for testing scrolling
-      const mockFlights = this.mockDataService.getMockFlights(workerId, 50);
-      
-      // Cache the mock data
-      this.flightsCache.set(workerId, {data: mockFlights, timestamp: currentTime});
-      
-      // Simulate network delay
-      return of(mockFlights);
     }
     
     // Create a new request and store it in the map
@@ -145,6 +116,11 @@ export class FlightService {
     } else {
       this.flightsCache.clear();
     }
+  }
+  
+  // Clear the workers cache to force a refresh on next request
+  clearWorkersCache(): void {
+    // No longer needed - removed worker caching
   }
   
   // Check if workers are already loaded

@@ -1,121 +1,76 @@
-# Quest
+# Worker Flights Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
+A lightweight Angular application for displaying and managing worker flight information.
 
-## Development server
+## Prerequisites
 
-To start a local development server, run:
+- Node.js (v16.x or later)
+- npm (v7.x or later)
+- Angular CLI (`npm install -g @angular/cli`)
+
+## Installation
+
+1. Clone this repository
+   ```bash
+   git clone <repository-url>
+   cd quest
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+## Running the Application
+
+### Development Server
+
+Run the development server with:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/` in your browser. The application will automatically reload if you change any of the source files.
 
-## CORS Handling
-
-### Local Development
-
-During local development, the application uses Angular's built-in proxy configuration to handle CORS issues. This is configured in `src/proxy.conf.json` and enabled in `angular.json`.
-
-To run with the proxy enabled:
+For mobile testing, you can make the server accessible on your local network:
 
 ```bash
-ng serve
+ng serve --host 0.0.0.0
 ```
 
-This will route all API requests through the development server, bypassing CORS restrictions.
+### Running with API proxy
 
-### Vercel Deployment
-
-When deployed to Vercel, the application uses a combination of approaches to handle CORS issues:
-
-1. **Vercel Rewrites**: Configured in `vercel.json`, this approach forwards API requests to the original endpoint.
-
-```json
-{
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "http://128.24.65.53:3000/:path*"
-    }
-  ]
-}
-```
-
-2. **Serverless Functions**: Located in the `/api` folder, these Node.js functions serve as proxies for API requests.
-
-3. **CORS Headers**: Custom headers are added to responses to allow cross-origin requests.
-
-```json
-{
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        // Other CORS headers...
-      ]
-    }
-  ]
-}
-```
-
-4. **Angular Routing Support**: The configuration includes a fallback to ensure Angular routing works correctly.
-
-```json
-{
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
-}
-```
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The application uses a proxy configuration to avoid CORS issues:
 
 ```bash
-ng generate component component-name
+ng serve --proxy-config proxy.conf.json
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Building for Production
+
+Build the project for production:
 
 ```bash
-ng generate --help
+ng build --configuration production
 ```
 
-## Building
+The build artifacts will be stored in the `dist/` directory.
 
-To build the project run:
+## Project Features
 
-```bash
-ng build
-```
+- Worker management and selection
+- Flight information display with sorting and filtering
+- Responsive design for desktop and mobile views
+- Real-time data updates via an API
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Project Structure
 
-## Running unit tests
+- `src/app/components/` - Application components
+- `src/app/shared/` - Shared services, models, and utilities
+- `src/app/pages/` - Page-level components
+- `public/assets/` - Static assets and styles
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Deployment
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+To deploy the application, copy the contents of the `dist/` directory to your web server of choice after building for production.
