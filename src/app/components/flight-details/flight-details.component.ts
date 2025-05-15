@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlightService } from '../../shared/services/flight.service';
 import { DurationPipe } from '../../shared/pipes/duration.pipe';
@@ -8,7 +8,8 @@ import { DurationPipe } from '../../shared/pipes/duration.pipe';
   standalone: true,
   imports: [CommonModule, DurationPipe],
   templateUrl: './flight-details.component.html',
-  styleUrls: ['./flight-details.component.scss']
+  styleUrls: ['./flight-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FlightDetailsComponent {
   private flightService = inject(FlightService);

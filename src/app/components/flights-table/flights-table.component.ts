@@ -1,22 +1,51 @@
-import { Component, OnDestroy, inject, signal, computed, effect } from '@angular/core';
+import { Component, OnDestroy, inject, signal, computed, effect, ViewChild, OnInit, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Flight } from '../../shared/models/flight.model';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
+import { MatTableModule, MatTable } from '@angular/material/table';
+import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-flights-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatSortModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    ScrollingModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './flights-table.component.html',
-  styleUrls: ['./flights-table.component.scss']
+  styleUrls: ['./flights-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FlightsTableComponent implements OnDestroy {
+export class FlightsTableComponent implements OnInit, AfterViewInit, OnDestroy {
   private flightService = inject(FlightService);
   private route = inject(ActivatedRoute);
   private refreshSubscription?: Subscription;
+  
+  // Table related properties
+  displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
+  dataSource: MatTableDataSource<Flight> = new MatTableDataSource<Flight>([]);
+  
+  @ViewChild(MatSort) sort!: MatSort;
   
   flights = signal<Flight[]>([]);
   isLoading = signal<boolean>(false);
@@ -24,6 +53,17 @@ export class FlightsTableComponent implements OnDestroy {
   // Computed properties
   workerName = computed(() => this.flightService.selectedWorker()?.name || 'No worker selected');
   errorMessage = computed(() => this.flightService.errorMessage());
+  
+  ngOnInit() {
+    // Initialize data source with empty array
+    this.dataSource = new MatTableDataSource<Flight>([]);
+  }
+  
+  ngAfterViewInit() {
+    if (this.dataSource) {
+      this.dataSource.sort = this.sort;
+    }
+  }
   
   // Start timer and load flights when worker changes
   constructor() {
@@ -48,6 +88,7 @@ export class FlightsTableComponent implements OnDestroy {
         this.startRefreshTimer();
       } else {
         this.flights.set([]);
+        this.dataSource.data = [];
         this.stopRefreshTimer();
       }
     });
@@ -57,12 +98,19 @@ export class FlightsTableComponent implements OnDestroy {
     this.stopRefreshTimer();
   }
   
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
   loadFlights(workerId: number): void {
     this.isLoading.set(true);
     
     this.flightService.getFlightsByWorkerId(workerId).subscribe({
       next: (data) => {
         this.flights.set(data);
+        this.dataSource.data = data;
+        
         // Auto-select the first flight if there's data and no flight is selected
         if (data.length > 0 && !this.flightService.selectedFlight()) {
           this.selectFlight(data[0]);

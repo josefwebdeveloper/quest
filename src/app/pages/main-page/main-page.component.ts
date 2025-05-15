@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkersListComponent } from '../../components/workers-list/workers-list.component';
 import { FlightsTableComponent } from '../../components/flights-table/flights-table.component';
@@ -15,7 +15,8 @@ import { FlightService } from '../../shared/services/flight.service';
     FlightDetailsComponent
   ],
   templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.scss'
+  styleUrl: './main-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPageComponent implements OnInit {
   title = 'Worker Flights';

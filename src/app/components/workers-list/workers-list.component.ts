@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
@@ -9,7 +9,8 @@ import { Worker } from '../../shared/models/worker.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './workers-list.component.html',
-  styleUrls: ['./workers-list.component.scss']
+  styleUrls: ['./workers-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkersListComponent implements OnInit {
   private flightService = inject(FlightService);
