@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkersListComponent } from '../../components/workers-list/workers-list.component';
 import { FlightsTableComponent } from '../../components/flights-table/flights-table.component';
 import { FlightDetailsComponent } from '../../components/flight-details/flight-details.component';
 import { FlightService } from '../../shared/services/flight.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-main-page',
@@ -18,8 +19,9 @@ import { FlightService } from '../../shared/services/flight.service';
   styleUrl: './main-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent implements OnInit, OnDestroy {
   title = 'Worker Flights';
+  private destroy$ = new Subject<void>();
   
   constructor(
     private route: ActivatedRoute,
@@ -29,40 +31,50 @@ export class MainPageComponent implements OnInit {
   
   ngOnInit(): void {
     // Check if we're on a worker route
-    this.route.paramMap.subscribe(params => {
-      const workerId = params.get('id');
-      
-      if (workerId) {
-        // Convert to number as route params are strings
-        const id = parseInt(workerId, 10);
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const workerId = params.get('id');
         
-        // Check if we already have loaded workers
-        if (this.flightService.hasWorkersLoaded()) {
-          const worker = this.flightService.getWorkerById(id);
-          if (worker) {
-            this.flightService.setSelectedWorker(worker);
-          } else {
-            // If worker not found, redirect to home page
-            this.router.navigate(['/']);
-          }
-        } else {
-          // Load workers data first, then select the worker
-          this.flightService.getWorkers().subscribe({
-            next: (workers) => {
-              const worker = this.flightService.getWorkerById(id);
-              if (worker) {
-                this.flightService.setSelectedWorker(worker);
-              } else {
-                // If worker not found, redirect to home
-                this.router.navigate(['/']);
-              }
-            },
-            error: (err) => {
-              console.error('Failed to load workers:', err);
+        if (workerId) {
+          // Convert to number as route params are strings
+          const id = parseInt(workerId, 10);
+          
+          // Check if we already have loaded workers
+          if (this.flightService.hasWorkersLoaded()) {
+            const worker = this.flightService.getWorkerById(id);
+            if (worker) {
+              this.flightService.setSelectedWorker(worker);
+            } else {
+              // If worker not found, redirect to home page
+              this.router.navigate(['/']);
             }
-          });
+          } else {
+            // Load workers data first, then select the worker
+            this.flightService.getWorkers()
+              .pipe(takeUntil(this.destroy$))
+              .subscribe({
+                next: (workers) => {
+                  const worker = this.flightService.getWorkerById(id);
+                  if (worker) {
+                    this.flightService.setSelectedWorker(worker);
+                  } else {
+                    // If worker not found, redirect to home
+                    this.router.navigate(['/']);
+                  }
+                },
+                error: (err) => {
+                  console.error('Failed to load workers:', err);
+                }
+              });
+          }
         }
-      }
-    });
+      });
+  }
+  
+  ngOnDestroy(): void {
+    // Отписка от всех подписок одной командой
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 } 

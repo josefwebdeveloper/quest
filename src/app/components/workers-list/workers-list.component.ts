@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Worker } from '../../shared/models/worker.model';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-workers-list',
@@ -12,10 +13,12 @@ import { Worker } from '../../shared/models/worker.model';
   styleUrls: ['./workers-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WorkersListComponent implements OnInit {
+export class WorkersListComponent implements OnInit, OnDestroy {
   private flightService = inject(FlightService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  
+  private destroy$ = new Subject<void>();
   
   workers = signal<Worker[]>([]);
   
@@ -27,42 +30,46 @@ export class WorkersListComponent implements OnInit {
   }
   
   loadWorkers(): void {
-    this.flightService.getWorkers().subscribe({
-      next: (data) => {
-        this.workers.set(data);
-        
-        // Check if there's a currently selected worker
-        const selectedWorker = this.flightService.selectedWorker();
-        
-        // Handle worker selection by route or default
-        if (!selectedWorker) {
-          // Check if we have a route parameter for worker ID
-          this.route.parent?.paramMap.subscribe(params => {
-            const workerId = params.get('id');
-            
-            if (workerId) {
-              // Find the worker in our list
-              const id = parseInt(workerId, 10);
-              const workerFromRoute = data.find(w => w.id === id);
-              
-              if (workerFromRoute) {
-                // Set the worker but don't navigate again
-                this.flightService.setSelectedWorker(workerFromRoute);
-              } else if (data.length > 0) {
-                // If worker not found by route ID, select the first worker
-                this.selectWorker(data[0]);
-              }
-            } else if (data.length > 0) {
-              // No route ID, select the first worker
-              this.selectWorker(data[0]);
-            }
-          });
+    this.flightService.getWorkers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.workers.set(data);
+          
+          // Check if there's a currently selected worker
+          const selectedWorker = this.flightService.selectedWorker();
+          
+          // Handle worker selection by route or default
+          if (!selectedWorker) {
+            // Check if we have a route parameter for worker ID
+            this.route.parent?.paramMap
+              .pipe(takeUntil(this.destroy$))
+              .subscribe(params => {
+                const workerId = params.get('id');
+                
+                if (workerId) {
+                  // Find the worker in our list
+                  const id = parseInt(workerId, 10);
+                  const workerFromRoute = data.find(w => w.id === id);
+                  
+                  if (workerFromRoute) {
+                    // Set the worker but don't navigate again
+                    this.flightService.setSelectedWorker(workerFromRoute);
+                  } else if (data.length > 0) {
+                    // If worker not found by route ID, select the first worker
+                    this.selectWorker(data[0]);
+                  }
+                } else if (data.length > 0) {
+                  // No route ID, select the first worker
+                  this.selectWorker(data[0]);
+                }
+              });
+          }
+        },
+        error: (err) => {
+          console.error('Error in worker component:', err);
         }
-      },
-      error: (err) => {
-        console.error('Error in worker component:', err);
-      }
-    });
+      });
   }
   
   retryLoadWorkers(): void {
@@ -94,5 +101,11 @@ export class WorkersListComponent implements OnInit {
     }
     
     return selectedWorker.id === worker.id;
+  }
+  
+  ngOnDestroy(): void {
+    // Отписка от всех подписок одной командой
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 } 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Flight } from '../../shared/models/flight.model';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, Subject, takeUntil } from 'rxjs';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,7 +35,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy {
   private flightService = inject(FlightService);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
-  private refreshSubscription?: Subscription;
+  private destroy$ = new Subject<void>();
   
   // Table related properties
   displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
@@ -130,17 +130,19 @@ export class FlightsTableComponent implements OnInit, OnDestroy {
   // Start timer and load flights when worker changes
   constructor() {
     // Listen for route parameter changes
-    this.route.parent?.paramMap.subscribe(params => {
-      const workerId = params.get('id');
-      if (workerId) {
-        const id = parseInt(workerId, 10);
-        const worker = this.flightService.getWorkerById(id);
-        
-        if (worker && worker.id !== this.flightService.selectedWorker()?.id) {
-          this.flightService.setSelectedWorker(worker);
+    this.route.parent?.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const workerId = params.get('id');
+        if (workerId) {
+          const id = parseInt(workerId, 10);
+          const worker = this.flightService.getWorkerById(id);
+          
+          if (worker && worker.id !== this.flightService.selectedWorker()?.id) {
+            this.flightService.setSelectedWorker(worker);
+          }
         }
-      }
-    });
+      });
     
     // Create an effect to react to worker selection changes
     effect(() => {
@@ -158,6 +160,10 @@ export class FlightsTableComponent implements OnInit, OnDestroy {
   
   ngOnDestroy(): void {
     this.stopRefreshTimer();
+    
+    // Отписка от всех подписок одной командой
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   
   applyFilter(event: Event): void {
@@ -168,7 +174,9 @@ export class FlightsTableComponent implements OnInit, OnDestroy {
   loadFlights(workerId: number): void {
     this.isLoading.set(true);
     
-    this.flightService.getFlightsByWorkerId(workerId).subscribe({
+    this.flightService.getFlightsByWorkerId(workerId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: (data) => {
         this.flights.set(data);
         this.dataSource.data = data;
@@ -227,18 +235,17 @@ export class FlightsTableComponent implements OnInit, OnDestroy {
     this.stopRefreshTimer(); // Clear any existing timer
     
     // Refresh every minute (60000 ms)
-    this.refreshSubscription = interval(60000).subscribe(() => {
-      const workerId = this.flightService.selectedWorker()?.id;
-      if (workerId) {
-        this.loadFlights(workerId);
-      }
-    });
+    interval(60000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        const workerId = this.flightService.selectedWorker()?.id;
+        if (workerId) {
+          this.loadFlights(workerId);
+        }
+      });
   }
   
   private stopRefreshTimer(): void {
-    if (this.refreshSubscription) {
-      this.refreshSubscription.unsubscribe();
-      this.refreshSubscription = undefined;
-    }
+    // Не нужно делать ничего, так как takeUntil автоматически отпишется
   }
 } 
