@@ -1,18 +1,15 @@
-import { Component, OnDestroy, inject, signal, computed, effect, ViewChild, OnInit, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, inject, signal, computed, effect, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Flight } from '../../shared/models/flight.model';
-import { interval, Subscription, Observable } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
-import { MatTableModule, MatTable } from '@angular/material/table';
-import { MatSortModule, MatSort } from '@angular/material/sort';
+import { interval, Subscription } from 'rxjs';
+import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -22,13 +19,11 @@ import { MatTableDataSource } from '@angular/material/table';
   imports: [
     CommonModule,
     MatTableModule,
-    MatSortModule,
     MatInputModule,
     MatFormFieldModule,
     MatCardModule,
     MatProgressSpinnerModule,
     MatButtonModule,
-    ScrollingModule,
     FormsModule,
     ReactiveFormsModule
   ],
@@ -36,16 +31,19 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./flights-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FlightsTableComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FlightsTableComponent implements OnInit, OnDestroy {
   private flightService = inject(FlightService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
   private refreshSubscription?: Subscription;
   
   // Table related properties
   displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
   dataSource: MatTableDataSource<Flight> = new MatTableDataSource<Flight>([]);
   
-  @ViewChild(MatSort) sort!: MatSort;
+  // Sorting properties
+  sortColumn = 'from_date';
+  sortDirection: 'asc' | 'desc' = 'asc';
   
   flights = signal<Flight[]>([]);
   isLoading = signal<boolean>(false);
@@ -55,14 +53,78 @@ export class FlightsTableComponent implements OnInit, AfterViewInit, OnDestroy {
   errorMessage = computed(() => this.flightService.errorMessage());
   
   ngOnInit() {
-    // Initialize data source with empty array
-    this.dataSource = new MatTableDataSource<Flight>([]);
+    // Default filtering
+    this.dataSource.filterPredicate = (data: Flight, filter: string) => {
+      const searchStr = (data.plane ?? '') + 
+                      (data.from ?? '') + 
+                      (data.from_date ?? '') + 
+                      (data.to ?? '') + 
+                      (data.to_date ?? '');
+      return searchStr.toLowerCase().includes(filter);
+    };
+    
+    // Apply initial sort
+    this.sortData(this.sortColumn);
   }
   
-  ngAfterViewInit() {
-    if (this.dataSource) {
-      this.dataSource.sort = this.sort;
+  // Parse date in DD/MM/YYYY format to a Date object
+  private parseDateString(dateStr: string): Date {
+    if (!dateStr) return new Date(0);
+    
+    // Check if the format is DD/MM/YYYY
+    const parts = dateStr.split('/');
+    if (parts.length === 3) {
+      // parts[0] = day, parts[1] = month, parts[2] = year
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1; // Months are 0-based in JS
+      const year = parseInt(parts[2], 10);
+      
+      return new Date(year, month, day);
     }
+    
+    // Fallback to standard parsing if not in expected format
+    return new Date(dateStr);
+  }
+  
+  // Custom sorting function
+  sortData(column: string) {
+    // If sorting the same column, toggle direction
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    
+    // Apply the sort
+    const sortedData = [...this.dataSource.data].sort((a, b) => {
+      let valueA: any;
+      let valueB: any;
+      
+      // For date columns, use custom parser
+      if (column === 'from_date' || column === 'to_date') {
+        const aVal = a[column as keyof Flight] as string;
+        const bVal = b[column as keyof Flight] as string;
+        
+        valueA = this.parseDateString(aVal).getTime();
+        valueB = this.parseDateString(bVal).getTime();
+      } else {
+        valueA = a[column as keyof Flight];
+        valueB = b[column as keyof Flight];
+      }
+      
+      // Handle undefined values
+      if (valueA === undefined) valueA = '';
+      if (valueB === undefined) valueB = '';
+      
+      // Compare values
+      const comparison = valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+      return this.sortDirection === 'asc' ? comparison : -comparison;
+    });
+    
+    // Update the table data
+    this.dataSource.data = sortedData;
+    this.cdr.detectChanges();
   }
   
   // Start timer and load flights when worker changes
@@ -111,15 +173,22 @@ export class FlightsTableComponent implements OnInit, AfterViewInit, OnDestroy {
         this.flights.set(data);
         this.dataSource.data = data;
         
+        // Re-apply current sort
+        this.sortData(this.sortColumn);
+        
         // Auto-select the first flight if there's data and no flight is selected
         if (data.length > 0 && !this.flightService.selectedFlight()) {
           this.selectFlight(data[0]);
         }
         this.isLoading.set(false);
+        
+        // Trigger change detection to update the view
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading flights:', err);
         this.isLoading.set(false);
+        this.cdr.detectChanges();
       }
     });
   }
