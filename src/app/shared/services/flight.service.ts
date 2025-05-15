@@ -13,7 +13,7 @@ export class FlightService {
   private errorHandler = inject(ErrorHandlerService);
 
   // Proxied endpoints to avoid CORS
-  private workersUrl = '/workers';
+  private workersUrl = 'http://128.24.65.53:3000/workers';
   private flightsBaseUrl = '/flights';
 
   // Signals
