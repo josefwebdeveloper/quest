@@ -27,13 +27,15 @@ $small-mobile-breakpoint: 480px;
     min-height: get-rem(56);
     
     @media (max-width: $mobile-breakpoint) {
-      padding: get-rem(10) get-rem(12);
-      min-height: get-rem(50);
+      padding: get-rem(8) get-rem(10);
+      min-height: get-rem(40);
+      margin-bottom: get-rem(6);
     }
     
     @media (max-width: $small-mobile-breakpoint) {
-      padding: get-rem(8) get-rem(10);
-      min-height: get-rem(46);
+      padding: get-rem(6) get-rem(8);
+      min-height: get-rem(36);
+      margin-bottom: get-rem(4);
     }
     
     h2 {
@@ -55,11 +57,10 @@ $small-mobile-breakpoint: 480px;
       font-weight: 500;
       font-size: get-rem(13);
       box-shadow: 0 get-rem(1) get-rem(3) rgba(0, 0, 0, 0.1);
-      animation: fadeIn 0.3s ease-in-out;
       
       @media (max-width: $small-mobile-breakpoint) {
-        font-size: get-rem(12);
-        padding: get-rem(3) get-rem(8);
+        font-size: get-rem(11);
+        padding: get-rem(2) get-rem(6);
       }
     }
   }
@@ -115,13 +116,13 @@ $small-mobile-breakpoint: 480px;
     overflow: auto;
     
     @media (max-width: $mobile-breakpoint) {
-      padding: get-rem(10) get-rem(12);
-      margin: 0 get-rem(8) get-rem(8);
+      padding: get-rem(8) get-rem(10);
+      margin: 0 get-rem(6) get-rem(6);
     }
     
     @media (max-width: $small-mobile-breakpoint) {
-      padding: get-rem(8) get-rem(10);
-      margin: 0 get-rem(6) get-rem(6);
+      padding: get-rem(6) get-rem(8);
+      margin: 0 get-rem(4) get-rem(4);
     }
     
     &::-webkit-scrollbar {
@@ -146,7 +147,11 @@ $small-mobile-breakpoint: 480px;
       justify-content: center;
       
       @media (max-width: $mobile-breakpoint) {
-        margin-bottom: get-rem(12);
+        margin-bottom: get-rem(8);
+      }
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        margin-bottom: get-rem(6);
       }
       
       .duration-indicator {
@@ -157,19 +162,24 @@ $small-mobile-breakpoint: 480px;
         color: #2e7d32;
         
         @media (max-width: $mobile-breakpoint) {
-          padding: get-rem(10) get-rem(12);
+          padding: get-rem(8) get-rem(10);
+          border-radius: get-rem(6);
         }
         
         @media (max-width: $small-mobile-breakpoint) {
-          padding: get-rem(8) get-rem(10);
+          padding: get-rem(6) get-rem(8);
         }
         
         .duration-value {
           font-size: get-rem(20);
           font-weight: 500;
           
+          @media (max-width: $mobile-breakpoint) {
+            font-size: get-rem(16);
+          }
+          
           @media (max-width: $small-mobile-breakpoint) {
-            font-size: get-rem(18);
+            font-size: get-rem(15);
           }
         }
         
@@ -180,9 +190,27 @@ $small-mobile-breakpoint: 480px;
           margin-top: get-rem(4);
           color: #4caf50;
           
-          @media (max-width: $small-mobile-breakpoint) {
-            font-size: get-rem(10);
+          @media (max-width: $mobile-breakpoint) {
+            font-size: get-rem(9);
+            margin-top: get-rem(2);
+            letter-spacing: get-rem(0.3);
           }
+        }
+      }
+    }
+    
+    .travel-info {
+      display: flex;
+      flex-direction: column;
+      
+      @media (max-width: $mobile-breakpoint) {
+        flex-direction: row;
+        margin: 0 get-rem(-4);
+        
+        .detail-section {
+          flex: 1;
+          margin: 0 get-rem(4);
+          min-width: 0;
         }
       }
     }
@@ -191,7 +219,7 @@ $small-mobile-breakpoint: 480px;
       margin-bottom: get-rem(12);
       
       @media (max-width: $mobile-breakpoint) {
-        margin-bottom: get-rem(8);
+        margin-bottom: get-rem(6);
       }
       
       .section-title {
@@ -201,51 +229,43 @@ $small-mobile-breakpoint: 480px;
         font-size: get-rem(14);
         border-bottom: get-rem(1) solid #f0f0f0;
         padding-bottom: get-rem(3);
+        
+        @media (max-width: $mobile-breakpoint) {
+          font-size: get-rem(12);
+          margin-bottom: get-rem(4);
+          padding-bottom: get-rem(2);
+        }
       }
       
       .detail-row {
         display: flex;
         padding: get-rem(4) 0;
         
+        @media (max-width: $mobile-breakpoint) {
+          padding: get-rem(2) 0;
+        }
+        
         .label {
           font-weight: 500;
           width: get-rem(60);
           color: #757575;
           font-size: get-rem(13);
+          
+          @media (max-width: $mobile-breakpoint) {
+            width: get-rem(40);
+            font-size: get-rem(11);
+          }
         }
         
         .value {
           flex: 1;
           color: #212121;
           font-size: get-rem(13);
+          
+          @media (max-width: $mobile-breakpoint) {
+            font-size: get-rem(11);
+          }
         }
-      }
-    }
-    
-    .flight-path {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      padding: get-rem(8) 0;
-      margin: get-rem(6) 0 get-rem(8);
-      
-      @media (max-width: $mobile-breakpoint) {
-        padding: get-rem(6) 0;
-        margin: get-rem(4) 0 get-rem(8);
-      }
-      
-      .path-line {
-        height: get-rem(2);
-        background: linear-gradient(to right, #c8e6c9, #4caf50);
-        width: 80%;
-        position: relative;
-      }
-      
-      .plane-icon {
-        position: absolute;
-        font-size: get-rem(16);
-        animation: flyPlane 10s linear infinite;
       }
     }
     
@@ -257,7 +277,7 @@ $small-mobile-breakpoint: 480px;
       border-top: get-rem(1) solid #f0f0f0;
       
       @media (max-width: $mobile-breakpoint) {
-        padding-top: get-rem(10);
+        padding-top: get-rem(6);
       }
       
       .status-badge {
@@ -267,6 +287,12 @@ $small-mobile-breakpoint: 480px;
         border-radius: get-rem(12);
         font-size: get-rem(12);
         font-weight: 500;
+        
+        @media (max-width: $mobile-breakpoint) {
+          padding: get-rem(2) get-rem(6);
+          font-size: get-rem(10);
+          border-radius: get-rem(10);
+        }
       }
     }
   }
@@ -289,14 +315,5 @@ $small-mobile-breakpoint: 480px;
   }
   50% {
     transform: translateY(get-rem(-5));
-  }
-}
-
-@keyframes flyPlane {
-  0% {
-    transform: translateX(calc(-40% - get-rem(10))) scale(0.7);
-  }
-  100% {
-    transform: translateX(calc(40% + get-rem(10))) scale(0.7);
   }
 }
