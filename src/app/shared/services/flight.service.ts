@@ -33,8 +33,7 @@ export class FlightService {
   private flightRequests = new Map<number, Observable<Flight[]>>();
   
   // Cache for recent API responses
-  private flightsCache = new Map<number, {data: Flight[], timestamp: number}>();
-  private readonly CACHE_TTL = 30 * 1000; // 30 seconds cache TTL
+  private flightsCache = new Map<number, Flight[]>();
   
   getWorkers(): Observable<Worker[]> {
     this.errorMessage.set(null);
@@ -57,13 +56,12 @@ export class FlightService {
   getFlightsByWorkerId(workerId: number): Observable<Flight[]> {
     this.errorMessage.set(null);
     
-    // Check if we have a valid, non-expired cached response
-    const cachedResponse = this.flightsCache.get(workerId);
-    const currentTime = Date.now();
+    // Check if we have a cached response
+    const cachedFlights = this.flightsCache.get(workerId);
     
-    if (cachedResponse && (currentTime - cachedResponse.timestamp < this.CACHE_TTL)) {
+    if (cachedFlights) {
       console.log(`Using cached response for worker ${workerId}`);
-      return of(cachedResponse.data);
+      return of(cachedFlights);
     }
     
     // Check if there's already an in-flight request
@@ -90,7 +88,7 @@ export class FlightService {
         }),
         // Cache the response
         tap(flights => {
-          this.flightsCache.set(workerId, {data: flights, timestamp: Date.now()});
+          this.flightsCache.set(workerId, flights);
           // Remove from in-flight requests after completion
           setTimeout(() => this.flightRequests.delete(workerId), 0);
         }),

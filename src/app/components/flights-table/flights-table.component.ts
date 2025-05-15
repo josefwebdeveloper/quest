@@ -41,10 +41,12 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private loaderService = inject(LoaderService);
   private destroy$ = new Subject<void>();
   
+  // Keep track of timer subscription
+  private timerSubscription: Subscription | null = null;
+  
   // Cache for API responses
   private flightsCache = new Map<number, Flight[]>();
   private lastFetchTime = new Map<number, number>();
-  private readonly CACHE_TTL = 30 * 1000; // 30 seconds cache TTL (was 5 minutes)
   
   // Table related properties
   displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
@@ -205,7 +207,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading.set(true);
     
     // Use cached data if it exists and isn't expired
-    if (cachedData && (currentTime - lastFetch) < this.CACHE_TTL) {
+    if (cachedData) {
       console.log('Using cached flight data');
       
       if (!this.haveFlightsChanged(cachedData, this.flights())) {
@@ -337,13 +339,14 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   
   private startRefreshTimer(): void {
-    this.stopRefreshTimer(); // Clear any existing timer
+    // Clear any existing timer to prevent multiple subscriptions
+    this.stopRefreshTimer();
     
-    // Use a single variable to track refresh status
+    // Use a variable to track refresh status
     let refreshInProgress = false;
     
-    // Refresh every minute (60000 ms)
-    interval(60000)
+    // Create a new timer subscription
+    this.timerSubscription = interval(60000)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         const workerId = this.flightService.selectedWorker()?.id;
@@ -355,8 +358,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
           // Set flag to prevent multiple refreshes
           refreshInProgress = true;
           
-          // Force cache invalidation on timer refresh
-          this.lastFetchTime.delete(workerId);
+          // Clear the flight service cache for this worker
           this.flightService.clearFlightsCache(workerId);
           
           // Load flights and reset flag when done
@@ -394,6 +396,9 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   
   private stopRefreshTimer(): void {
-    // Не нужно делать ничего, так как takeUntil автоматически отпишется
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = null;
+    }
   }
 } 
