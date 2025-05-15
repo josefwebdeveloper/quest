@@ -11,15 +11,15 @@ import { ErrorHandlerService } from './error-handler.service';
 export class FlightService {
   private http = inject(HttpClient);
   private errorHandler = inject(ErrorHandlerService);
-  
+
   // Proxied endpoints to avoid CORS
-  private workersUrl = '/api/workers';
-  private flightsBaseUrl = '/api/flights';
+  private workersUrl = '/workers';
+  private flightsBaseUrl = '/flights';
 
   // Signals
   selectedWorker = signal<Worker | null>(null);
   selectedFlight = signal<Flight | null>(null);
-  
+
   // Error message signal
   errorMessage = signal<string | null>(null);
 
@@ -53,8 +53,8 @@ export class FlightService {
   setSelectedFlight(flight: Flight | null): void {
     this.selectedFlight.set(flight);
   }
-  
+
   clearError(): void {
     this.errorMessage.set(null);
   }
-} 
+}
