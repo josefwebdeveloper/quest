@@ -11,7 +11,7 @@
           <button mat-raised-button color="warn" (click)="retryLoadFlights()">Retry</button>
         </div>
       } @else if (dataSource.data.length === 0 && !isLoading()) {
-<!--        <div class="no-data">No flights found for this worker</div>-->
+        <div class="no-data">No flights found for this worker</div>
       } @else {
         <!-- Search Filter -->
         <mat-form-field appearance="outline" class="filter-field">

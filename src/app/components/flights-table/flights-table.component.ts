@@ -220,6 +220,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     
     // Show global loader only for actual API calls
     this.loaderService.show();
+    console.log(`Loading flights for worker ${workerId}`);
     
     this.flightService.getFlightsByWorkerId(workerId)
       .pipe(takeUntil(this.destroy$))
@@ -231,18 +232,16 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
           
           const hasDataChanged = this.haveFlightsChanged(data, this.flights());
           
-          // Проверяем, изменились ли данные
           if (hasDataChanged) {
-            console.log('Данные полетов изменились, обновляем UI');
             this.updateFlightsDisplay(data);
           } else {
-            console.log('Данные полетов не изменились, пропускаем обновление UI');
             this.isLoading.set(false);
             this.cdr.detectChanges();
           }
           
           // Hide global loader
           this.loaderService.hide();
+          console.log('Finished loading flights, loader hidden');
         },
         error: (err) => {
           console.error('Error loading flights:', err);
@@ -340,18 +339,56 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private startRefreshTimer(): void {
     this.stopRefreshTimer(); // Clear any existing timer
     
+    // Use a single variable to track refresh status
+    let refreshInProgress = false;
+    
     // Refresh every minute (60000 ms)
     interval(60000)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         const workerId = this.flightService.selectedWorker()?.id;
-        if (workerId) {
+        
+        // Only refresh if not already in progress and there is a selected worker
+        if (workerId && !refreshInProgress) {
+          console.log(`Minute timer: starting refresh for worker ${workerId}`);
+          
+          // Set flag to prevent multiple refreshes
+          refreshInProgress = true;
+          
           // Force cache invalidation on timer refresh
           this.lastFetchTime.delete(workerId);
-          // Force service cache invalidation as well
           this.flightService.clearFlightsCache(workerId);
-          console.log(`Minute timer: forcing refresh for worker ${workerId}`);
-          this.loadFlights(workerId);
+          
+          // Load flights and reset flag when done
+          this.flightService.getFlightsByWorkerId(workerId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (data) => {
+                console.log(`Refresh complete for worker ${workerId}`);
+                
+                // Update local cache
+                this.flightsCache.set(workerId, [...data]);
+                this.lastFetchTime.set(workerId, Date.now());
+                
+                // Update UI if data changed
+                const hasDataChanged = this.haveFlightsChanged(data, this.flights());
+                if (hasDataChanged) {
+                  console.log('Refreshed data changed, updating UI');
+                  this.updateFlightsDisplay(data);
+                } else {
+                  console.log('Refreshed data unchanged, no update needed');
+                  this.isLoading.set(false);
+                }
+                
+                // Reset flag
+                refreshInProgress = false;
+              },
+              error: (err) => {
+                console.error('Error during refresh:', err);
+                this.isLoading.set(false);
+                refreshInProgress = false;
+              }
+            });
         }
       });
   }
