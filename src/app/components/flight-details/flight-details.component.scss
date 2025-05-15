@@ -1,7 +1,6 @@
 @use "../../../../public/assets/styles/functions" as *;
 
 .flight-details {
-  padding: get-rem(16);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -13,13 +12,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: get-rem(20);
-    padding-bottom: get-rem(10);
-    border-bottom: get-rem(2) solid #e0e0e0;
+    padding: get-rem(12) get-rem(16);
+    margin-bottom: get-rem(12);
+    border-bottom: get-rem(1) solid #e0e0e0;
+    min-height: get-rem(56);
     
     h2 {
       margin: 0;
-      font-size: get-rem(20);
+      font-size: get-rem(16);
       font-weight: 500;
       color: #3f51b5;
     }
@@ -27,10 +27,11 @@
     .flight-badge {
       background: linear-gradient(135deg, #3f51b5, #5c6bc0);
       color: white;
-      padding: get-rem(6) get-rem(12);
-      border-radius: get-rem(20);
+      padding: get-rem(4) get-rem(10);
+      border-radius: get-rem(16);
       font-weight: 500;
-      box-shadow: 0 get-rem(2) get-rem(4) rgba(0, 0, 0, 0.1);
+      font-size: get-rem(13);
+      box-shadow: 0 get-rem(1) get-rem(3) rgba(0, 0, 0, 0.1);
       animation: fadeIn 0.3s ease-in-out;
     }
   }
@@ -47,48 +48,66 @@
     text-align: center;
     
     .icon {
-      font-size: get-rem(48);
-      margin-bottom: get-rem(16);
+      font-size: get-rem(32);
+      margin-bottom: get-rem(12);
       opacity: 0.6;
       animation: float 3s ease-in-out infinite;
     }
     
     p {
-      font-size: get-rem(16);
+      font-size: get-rem(14);
       margin: 0;
     }
   }
 
   .details-container {
-    padding: get-rem(16);
+    padding: get-rem(12) get-rem(16);
+    margin: 0 get-rem(12) get-rem(12);
     border-radius: get-rem(8);
     background-color: white;
     flex: 1;
-    overflow-y: auto;
-    box-shadow: 0 get-rem(2) get-rem(10) rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
+    box-shadow: 0 get-rem(2) get-rem(8) rgba(0, 0, 0, 0.05);
     animation: fadeIn 0.3s ease-in-out;
+    min-height: 0;
+    overflow: auto;
+    
+    &::-webkit-scrollbar {
+      width: get-rem(4);
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: get-rem(2);
+    }
+    
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
     
     .flight-summary {
-      margin-bottom: get-rem(24);
+      margin-bottom: get-rem(16);
       display: flex;
       justify-content: center;
       
       .duration-indicator {
         text-align: center;
-        padding: get-rem(16) get-rem(24);
+        padding: get-rem(12) get-rem(16);
         background-color: #e8eaf6;
         border-radius: get-rem(8);
         color: #3f51b5;
         
         .duration-value {
-          font-size: get-rem(24);
+          font-size: get-rem(20);
           font-weight: 500;
         }
         
         .duration-label {
-          font-size: get-rem(12);
+          font-size: get-rem(11);
           text-transform: uppercase;
           letter-spacing: get-rem(0.5);
           margin-top: get-rem(4);
@@ -104,24 +123,26 @@
         font-weight: 500;
         color: #424242;
         margin-bottom: get-rem(8);
-        font-size: get-rem(16);
+        font-size: get-rem(14);
         border-bottom: get-rem(1) solid #f0f0f0;
         padding-bottom: get-rem(4);
       }
       
       .detail-row {
         display: flex;
-        padding: get-rem(8) 0;
+        padding: get-rem(6) 0;
         
         .label {
           font-weight: 500;
-          width: get-rem(100);
+          width: get-rem(60);
           color: #757575;
+          font-size: get-rem(13);
         }
         
         .value {
           flex: 1;
           color: #212121;
+          font-size: get-rem(13);
         }
       }
     }
@@ -131,8 +152,8 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: get-rem(16) 0;
-      margin: get-rem(8) 0 get-rem(16);
+      padding: get-rem(12) 0;
+      margin: get-rem(8) 0 get-rem(12);
       
       .path-line {
         height: get-rem(2);
@@ -143,23 +164,24 @@
       
       .plane-icon {
         position: absolute;
-        font-size: get-rem(20);
+        font-size: get-rem(16);
         animation: flyPlane 10s linear infinite;
       }
     }
     
     .flight-footer {
       margin-top: auto;
-      padding-top: get-rem(16);
+      padding-top: get-rem(12);
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
+      border-top: get-rem(1) solid #f0f0f0;
       
       .status-badge {
         background-color: #c8e6c9;
         color: #2e7d32;
-        padding: get-rem(4) get-rem(12);
-        border-radius: get-rem(16);
-        font-size: get-rem(14);
+        padding: get-rem(3) get-rem(10);
+        border-radius: get-rem(12);
+        font-size: get-rem(12);
         font-weight: 500;
       }
     }
@@ -169,7 +191,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(get-rem(10));
+    transform: translateY(get-rem(5));
   }
   to {
     opacity: 1;
@@ -182,15 +204,15 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(get-rem(-10));
+    transform: translateY(get-rem(-5));
   }
 }
 
 @keyframes flyPlane {
   0% {
-    transform: translateX(calc(-40% - get-rem(10))) scale(0.8);
+    transform: translateX(calc(-40% - get-rem(10))) scale(0.7);
   }
   100% {
-    transform: translateX(calc(40% + get-rem(10))) scale(0.8);
+    transform: translateX(calc(40% + get-rem(10))) scale(0.7);
   }
 }
