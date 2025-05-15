@@ -6,46 +6,191 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background-color: #fafafa;
+  border-left: get-rem(1) solid #e0e0e0;
 
-  h2 {
-    margin-bottom: get-rem(16);
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: get-rem(20);
+    padding-bottom: get-rem(10);
+    border-bottom: get-rem(2) solid #e0e0e0;
+    
+    h2 {
+      margin: 0;
+      font-size: get-rem(20);
+      font-weight: 500;
+      color: #3f51b5;
+    }
+    
+    .flight-badge {
+      background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+      color: white;
+      padding: get-rem(6) get-rem(12);
+      border-radius: get-rem(20);
+      font-weight: 500;
+      box-shadow: 0 get-rem(2) get-rem(4) rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.3s ease-in-out;
+    }
   }
 
   .no-flight {
     padding: get-rem(16);
     font-style: italic;
-    color: #666;
+    color: #757575;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1;
+    text-align: center;
+    
+    .icon {
+      font-size: get-rem(48);
+      margin-bottom: get-rem(16);
+      opacity: 0.6;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    p {
+      font-size: get-rem(16);
+      margin: 0;
+    }
   }
 
   .details-container {
     padding: get-rem(16);
-    border: 1px solid #eee;
-    border-radius: get-rem(4);
-    background-color: #f9f9f9;
+    border-radius: get-rem(8);
+    background-color: white;
     flex: 1;
     overflow-y: auto;
-
-    .detail-row {
+    box-shadow: 0 get-rem(2) get-rem(10) rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-in-out;
+    
+    .flight-summary {
+      margin-bottom: get-rem(24);
       display: flex;
-      margin-bottom: get-rem(16);
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      .label {
-        font-weight: bold;
-        width: get-rem(120);
-        color: #555;
-      }
-
-      .value {
-        flex: 1;
+      justify-content: center;
+      
+      .duration-indicator {
+        text-align: center;
+        padding: get-rem(16) get-rem(24);
+        background-color: #e8eaf6;
+        border-radius: get-rem(8);
+        color: #3f51b5;
+        
+        .duration-value {
+          font-size: get-rem(24);
+          font-weight: 500;
+        }
+        
+        .duration-label {
+          font-size: get-rem(12);
+          text-transform: uppercase;
+          letter-spacing: get-rem(0.5);
+          margin-top: get-rem(4);
+          color: #7986cb;
+        }
       }
     }
+    
+    .detail-section {
+      margin-bottom: get-rem(16);
+      
+      .section-title {
+        font-weight: 500;
+        color: #424242;
+        margin-bottom: get-rem(8);
+        font-size: get-rem(16);
+        border-bottom: get-rem(1) solid #f0f0f0;
+        padding-bottom: get-rem(4);
+      }
+      
+      .detail-row {
+        display: flex;
+        padding: get-rem(8) 0;
+        
+        .label {
+          font-weight: 500;
+          width: get-rem(100);
+          color: #757575;
+        }
+        
+        .value {
+          flex: 1;
+          color: #212121;
+        }
+      }
+    }
+    
+    .flight-path {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: get-rem(16) 0;
+      margin: get-rem(8) 0 get-rem(16);
+      
+      .path-line {
+        height: get-rem(2);
+        background: linear-gradient(to right, #bbdefb, #64b5f6);
+        width: 80%;
+        position: relative;
+      }
+      
+      .plane-icon {
+        position: absolute;
+        font-size: get-rem(20);
+        animation: flyPlane 10s linear infinite;
+      }
+    }
+    
+    .flight-footer {
+      margin-top: auto;
+      padding-top: get-rem(16);
+      display: flex;
+      justify-content: center;
+      
+      .status-badge {
+        background-color: #c8e6c9;
+        color: #2e7d32;
+        padding: get-rem(4) get-rem(12);
+        border-radius: get-rem(16);
+        font-size: get-rem(14);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(get-rem(10));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(get-rem(-10));
+  }
+}
+
+@keyframes flyPlane {
+  0% {
+    transform: translateX(calc(-40% - get-rem(10))) scale(0.8);
+  }
+  100% {
+    transform: translateX(calc(40% + get-rem(10))) scale(0.8);
   }
 }

@@ -1,22 +1,38 @@
 <div class="workers-list">
-  <h2>Workers</h2>
+  <div class="header">
+    <h2>Workers</h2>
+    <div class="workers-count">
+      @if (workers().length > 0) {
+        <span class="counter">{{ workers().length }}</span>
+      }
+    </div>
+  </div>
   
   @if (errorMessage()) {
     <div class="error-message">
-      {{ errorMessage() }}
-      <button (click)="retryLoadWorkers()">Retry</button>
+      <div class="error-icon">⚠️</div>
+      <div class="error-content">
+        <p>{{ errorMessage() }}</p>
+        <button (click)="retryLoadWorkers()">Retry</button>
+      </div>
     </div>
   }
   
-  <ul>
+  <ul class="workers-items">
     @for (worker of workers(); track $index) {
       <li 
         [class.selected]="isSelected(worker)"
         (click)="selectWorker(worker)">
-        {{ worker.name }}
+        <div class="worker-avatar">{{ worker.name.charAt(0) }}</div>
+        <div class="worker-info">
+          <span class="worker-name">{{ worker.name }}</span>
+        </div>
       </li>
     } @empty {
-      <li class="empty-list">No workers found</li>
+      <li class="empty-list">
+        <div class="empty-icon">👤</div>
+        <p>No workers found</p>
+      </li>
     }
   </ul>
 </div> 

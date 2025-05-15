@@ -2,59 +2,186 @@
 
 .workers-list {
   padding: get-rem(16);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f7fa;
 
-  h2 {
-    margin-bottom: get-rem(16);
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: get-rem(20);
+    padding-bottom: get-rem(12);
+    border-bottom: get-rem(2) solid #e0e0e0;
+    
+    h2 {
+      margin: 0;
+      color: #3f51b5;
+      font-size: get-rem(20);
+      font-weight: 500;
+    }
+    
+    .workers-count {
+      .counter {
+        background-color: #3f51b5;
+        color: white;
+        border-radius: 50%;
+        width: get-rem(28);
+        height: get-rem(28);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: get-rem(14);
+        font-weight: 500;
+      }
+    }
   }
 
   .error-message {
     padding: get-rem(12);
     margin-bottom: get-rem(16);
-    background-color: #ffebee;
-    border: 1px solid #ffcdd2;
+    background-color: #fff4e5;
+    border-left: get-rem(4) solid #ff9800;
     border-radius: get-rem(4);
-    color: #d32f2f;
+    color: #e65100;
+    display: flex;
+    align-items: flex-start;
+    animation: slideIn 0.3s ease-out;
+    
+    .error-icon {
+      font-size: get-rem(20);
+      margin-right: get-rem(12);
+    }
+    
+    .error-content {
+      flex: 1;
+      
+      p {
+        margin: 0 0 get-rem(8) 0;
+      }
+    }
 
     button {
-      margin-top: get-rem(8);
       padding: get-rem(6) get-rem(12);
-      background-color: #d32f2f;
+      background-color: #ff9800;
       color: white;
       border: none;
       border-radius: get-rem(4);
       cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
 
       &:hover {
-        background-color: #b71c1c;
+        background-color: #f57c00;
+        transform: translateY(get-rem(-1));
+      }
+      
+      &:active {
+        transform: translateY(get-rem(1));
       }
     }
   }
 
-  ul {
+  .workers-items {
     list-style: none;
     padding: 0;
     margin: 0;
+    overflow-y: auto;
+    flex: 1;
 
     li {
       padding: get-rem(12) get-rem(16);
-      border-bottom: 1px solid #eee;
+      border-radius: get-rem(8);
+      margin-bottom: get-rem(8);
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      box-shadow: 0 get-rem(1) get-rem(3) rgba(0, 0, 0, 0.05);
 
       &:hover {
         background-color: #f5f5f5;
+        transform: translateY(get-rem(-2));
+        box-shadow: 0 get-rem(3) get-rem(6) rgba(0, 0, 0, 0.1);
       }
 
       &.selected {
-        background-color: #e0f2ff;
-        font-weight: bold;
+        background-color: #e8eaf6;
+        border-left: get-rem(4) solid #3f51b5;
+        padding-left: get-rem(12);
+        
+        .worker-avatar {
+          background-color: #3f51b5;
+          color: white;
+        }
+        
+        .worker-name {
+          font-weight: 500;
+          color: #3f51b5;
+        }
+      }
+      
+      .worker-avatar {
+        width: get-rem(36);
+        height: get-rem(36);
+        border-radius: 50%;
+        background-color: #c5cae9;
+        color: #3f51b5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        margin-right: get-rem(12);
+        transition: background-color 0.2s ease;
+      }
+      
+      .worker-info {
+        flex: 1;
+        
+        .worker-name {
+          font-size: get-rem(16);
+          color: #424242;
+        }
       }
 
       &.empty-list {
         font-style: italic;
         color: #888;
         cursor: default;
+        justify-content: center;
+        flex-direction: column;
+        padding: get-rem(32) get-rem(16);
+        text-align: center;
+        background-color: transparent;
+        box-shadow: none;
+        
+        &:hover {
+          transform: none;
+          box-shadow: none;
+        }
+        
+        .empty-icon {
+          font-size: get-rem(32);
+          margin-bottom: get-rem(8);
+          opacity: 0.5;
+        }
+        
+        p {
+          margin: 0;
+        }
       }
     }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(get-rem(-10));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

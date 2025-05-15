@@ -1,28 +1,48 @@
 <div class="flight-details">
-  <h2>Flight Information</h2>
+  <div class="header">
+    <h2>Flight Information</h2>
+    @if (hasSelectedFlight()) {
+      <div class="flight-badge">{{ planeNumber() }}</div>
+    }
+  </div>
   
   @if (!hasSelectedFlight()) {
-    <div class="no-flight">No flight selected</div>
+    <div class="no-flight">
+      <div class="icon">✈️</div>
+      <p>Select a flight to view details</p>
+    </div>
   } @else {
     <div class="details-container">
-      <div class="detail-row">
-        <div class="label">Plane Number:</div>
-        <div class="value">{{ planeNumber() }}</div>
+      <div class="flight-summary">
+        <div class="duration-indicator">
+          <div class="duration-value">{{ duration() | duration }}</div>
+          <div class="duration-label">Flight Duration</div>
+        </div>
       </div>
       
-      <div class="detail-row">
-        <div class="label">Duration:</div>
-        <div class="value">{{ duration() | duration }}</div>
+      <div class="detail-section">
+        <div class="section-title">Origin</div>
+        <div class="detail-row">
+          <div class="label">Gate:</div>
+          <div class="value">{{ originGate() }}</div>
+        </div>
       </div>
       
-      <div class="detail-row">
-        <div class="label">Origin Gate:</div>
-        <div class="value">{{ originGate() }}</div>
+      <div class="flight-path">
+        <div class="path-line"></div>
+        <div class="plane-icon">✈️</div>
       </div>
       
-      <div class="detail-row">
-        <div class="label">Destination Gate:</div>
-        <div class="value">{{ destinationGate() }}</div>
+      <div class="detail-section">
+        <div class="section-title">Destination</div>
+        <div class="detail-row">
+          <div class="label">Gate:</div>
+          <div class="value">{{ destinationGate() }}</div>
+        </div>
+      </div>
+      
+      <div class="flight-footer">
+        <div class="status-badge">On Time</div>
       </div>
     </div>
   }
