@@ -195,28 +195,75 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.flightService.getFlightsByWorkerId(workerId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-      next: (data) => {
-        this.flights.set(data);
-        this.dataSource.data = data;
-        
-        // Re-apply current sort
-        this.sortData(this.sortColumn);
-        
-        // Auto-select the first flight if there's data and no flight is selected
-        if (data.length > 0 && !this.flightService.selectedFlight()) {
-          this.selectFlight(data[0]);
+        next: (data) => {
+          const hasDataChanged = this.haveFlightsChanged(data, this.flights());
+          
+          // Проверяем, изменились ли данные
+          if (hasDataChanged) {
+            console.log('Данные полетов изменились, обновляем UI');
+            this.flights.set(data);
+            this.dataSource.data = data;
+            
+            // Re-apply current sort
+            this.sortData(this.sortColumn);
+            
+            // Auto-select the first flight if there's data and no flight is selected
+            if (data.length > 0 && !this.flightService.selectedFlight()) {
+              this.selectFlight(data[0]);
+            }
+          } else {
+            console.log('Данные полетов не изменились, пропускаем обновление UI');
+          }
+          
+          // Всегда отключаем индикатор загрузки
+          this.isLoading.set(false);
+          
+          // Trigger change detection to update the view
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error loading flights:', err);
+          this.isLoading.set(false);
+          this.cdr.detectChanges();
         }
-        this.isLoading.set(false);
-        
-        // Trigger change detection to update the view
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error loading flights:', err);
-        this.isLoading.set(false);
-        this.cdr.detectChanges();
+      });
+  }
+  
+  /**
+   * Сравнивает два массива полетов, чтобы определить, изменились ли данные
+   * @param newFlights Новый массив полетов
+   * @param currentFlights Текущий массив полетов
+   * @returns true, если данные изменились; false, если данные идентичны
+   */
+  private haveFlightsChanged(newFlights: Flight[], currentFlights: Flight[]): boolean {
+    // Быстрая проверка по длине массивов
+    if (newFlights.length !== currentFlights.length) {
+      return true;
+    }
+    
+    // Создаем карту текущих полетов для быстрого поиска
+    const currentFlightsMap = new Map(currentFlights.map(flight => [flight.id, flight]));
+    
+    // Проверяем каждый полет в новом массиве
+    for (const newFlight of newFlights) {
+      const currentFlight = currentFlightsMap.get(newFlight.id);
+      
+      // Если полет не найден или какие-либо свойства различаются
+      if (!currentFlight ||
+          newFlight.plane !== currentFlight.plane ||
+          newFlight.from !== currentFlight.from ||
+          newFlight.to !== currentFlight.to ||
+          newFlight.from_date !== currentFlight.from_date ||
+          newFlight.to_date !== currentFlight.to_date ||
+          newFlight.from_gate !== currentFlight.from_gate ||
+          newFlight.to_gate !== currentFlight.to_gate ||
+          newFlight.duration !== currentFlight.duration) {
+        return true;
       }
-    });
+    }
+    
+    // Если все проверки пройдены, данные не изменились
+    return false;
   }
   
   retryLoadFlights(): void {

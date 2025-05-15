@@ -58,15 +58,15 @@ $small-mobile-breakpoint: 480px;
       
       @media (max-width: $mobile-breakpoint) {
         width: 100%;
-        height: get-rem(200);
-        min-height: get-rem(200);
+        height: get-rem(150);
+        min-height: get-rem(150);
         border-right: none;
         border-bottom: 1px solid #c8e6c9;
       }
       
       @media (max-width: $small-mobile-breakpoint) {
-        height: get-rem(180);
-        min-height: get-rem(180);
+        height: get-rem(130);
+        min-height: get-rem(130);
       }
     }
     
@@ -75,11 +75,13 @@ $small-mobile-breakpoint: 480px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      padding-top: 0;
       
       .flights-container {
         display: flex;
         flex: 1;
         overflow: hidden;
+        margin-top: 0;
         
         @media (max-width: $mobile-breakpoint) {
           flex-direction: column;

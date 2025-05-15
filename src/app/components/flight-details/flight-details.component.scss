@@ -188,24 +188,24 @@ $small-mobile-breakpoint: 480px;
     }
     
     .detail-section {
-      margin-bottom: get-rem(16);
+      margin-bottom: get-rem(12);
       
       @media (max-width: $mobile-breakpoint) {
-        margin-bottom: get-rem(12);
+        margin-bottom: get-rem(8);
       }
       
       .section-title {
         font-weight: 500;
         color: #424242;
-        margin-bottom: get-rem(8);
+        margin-bottom: get-rem(6);
         font-size: get-rem(14);
         border-bottom: get-rem(1) solid #f0f0f0;
-        padding-bottom: get-rem(4);
+        padding-bottom: get-rem(3);
       }
       
       .detail-row {
         display: flex;
-        padding: get-rem(6) 0;
+        padding: get-rem(4) 0;
         
         .label {
           font-weight: 500;
@@ -227,12 +227,12 @@ $small-mobile-breakpoint: 480px;
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: get-rem(12) 0;
-      margin: get-rem(8) 0 get-rem(12);
+      padding: get-rem(8) 0;
+      margin: get-rem(6) 0 get-rem(8);
       
       @media (max-width: $mobile-breakpoint) {
-        padding: get-rem(8) 0;
-        margin: get-rem(6) 0 get-rem(10);
+        padding: get-rem(6) 0;
+        margin: get-rem(4) 0 get-rem(8);
       }
       
       .path-line {

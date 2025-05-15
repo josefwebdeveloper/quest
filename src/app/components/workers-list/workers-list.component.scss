@@ -15,20 +15,20 @@ $small-mobile-breakpoint: 480px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: get-rem(12);
-    padding: get-rem(12) get-rem(16);
+    margin-bottom: get-rem(10);
+    padding: get-rem(10) get-rem(16);
     border-bottom: get-rem(1) solid #e0e0e0;
-    min-height: get-rem(56);
+    min-height: get-rem(46);
     
     @media (max-width: $mobile-breakpoint) {
-      margin-bottom: get-rem(8);
-      padding: get-rem(10) get-rem(12);
-      min-height: get-rem(50);
+      margin-bottom: get-rem(6);
+      padding: get-rem(8) get-rem(12);
+      min-height: get-rem(42);
     }
     
     @media (max-width: $small-mobile-breakpoint) {
-      padding: get-rem(8) get-rem(10);
-      min-height: get-rem(46);
+      padding: get-rem(6) get-rem(10);
+      min-height: get-rem(38);
     }
     
     h2 {
@@ -155,31 +155,31 @@ $small-mobile-breakpoint: 480px;
     scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
 
     li {
-      padding: get-rem(10) get-rem(12);
+      padding: get-rem(6) get-rem(10);
       border-radius: get-rem(6);
-      margin-bottom: get-rem(6);
+      margin-bottom: get-rem(4);
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
       background-color: white;
       box-shadow: 0 get-rem(1) get-rem(2) rgba(0, 0, 0, 0.05);
-      height: get-rem(42);
+      height: get-rem(32);
       
       @media (max-width: $mobile-breakpoint) {
         margin-right: get-rem(8);
         margin-bottom: 0;
         min-width: get-rem(120);
-        height: get-rem(36);
+        height: get-rem(28);
         flex-shrink: 0;
         justify-content: center;
-        padding: get-rem(8) get-rem(10);
+        padding: get-rem(6) get-rem(8);
       }
       
       @media (max-width: $small-mobile-breakpoint) {
         min-width: get-rem(100);
-        height: get-rem(32);
-        padding: get-rem(6) get-rem(8);
+        height: get-rem(26);
+        padding: get-rem(4) get-rem(6);
       }
 
       &:hover {
@@ -212,8 +212,8 @@ $small-mobile-breakpoint: 480px;
       }
       
       .worker-avatar {
-        width: get-rem(28);
-        height: get-rem(28);
+        width: get-rem(24);
+        height: get-rem(24);
         border-radius: 50%;
         background-color: #c8e6c9;
         color: #2e7d32;
@@ -223,12 +223,12 @@ $small-mobile-breakpoint: 480px;
         font-weight: 500;
         margin-right: get-rem(8);
         transition: background-color 0.2s ease;
-        font-size: get-rem(12);
+        font-size: get-rem(11);
         
         @media (max-width: $mobile-breakpoint) {
-          width: get-rem(24);
-          height: get-rem(24);
-          font-size: get-rem(11);
+          width: get-rem(20);
+          height: get-rem(20);
+          font-size: get-rem(10);
           margin-right: get-rem(5);
         }
       }
