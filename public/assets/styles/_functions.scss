@@ -1,0 +1,20 @@
+@use "sass:math";
+
+// Base font size (16px is default browser font size)
+$base-font-size: 16px;
+
+/// Convert pixels to rem units
+/// @param {Number} $pixels - The pixel value to convert
+/// @param {Number} $context [$base-font-size] - The base font size to use for conversion
+/// @return {Number} The converted value in rem units
+@function get-rem($pixels, $context: $base-font-size) {
+  @if math.is-unitless($pixels) {
+    $pixels: $pixels * 1px;
+  }
+
+  @if math.is-unitless($context) {
+    $context: $context * 1px;
+  }
+
+  @return math.div($pixels, $context) * 1rem;
+}
