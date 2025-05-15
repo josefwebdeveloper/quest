@@ -1,5 +1,10 @@
 @use "../public/assets/styles/variables" as *;
-@use '../public/assets/styles/functions' as *;
+@use "../public/assets/styles/functions" as *;
+
+// Use functions
+@function get-rem($pixels) {
+  @return get-rem($pixels);
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

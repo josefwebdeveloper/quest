@@ -1,0 +1,41 @@
+@use "../../../../public/assets/styles/functions" as *;
+
+.flight-details {
+  padding: get-rem(16);
+
+  h2 {
+    margin-bottom: get-rem(16);
+  }
+
+  .no-flight {
+    padding: get-rem(16);
+    font-style: italic;
+    color: #666;
+  }
+
+  .details-container {
+    padding: get-rem(16);
+    border: 1px solid #eee;
+    border-radius: get-rem(4);
+    background-color: #f9f9f9;
+
+    .detail-row {
+      display: flex;
+      margin-bottom: get-rem(16);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        font-weight: bold;
+        width: get-rem(150);
+        color: #555;
+      }
+
+      .value {
+        flex: 1;
+      }
+    }
+  }
+}

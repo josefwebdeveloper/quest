@@ -1,9 +1,11 @@
 @use "sass:math";
+@use "sass:meta";
+@use "variables" as *;
 
 // Base font size (16px is default browser font size)
 $base-font-size: 16px;
 
-/// Convert pixels to rem units
+// Convert pixels to rem units
 /// @param {Number} $pixels - The pixel value to convert
 /// @param {Number} $context [$base-font-size] - The base font size to use for conversion
 /// @return {Number} The converted value in rem units
@@ -17,4 +19,27 @@ $base-font-size: 16px;
   }
 
   @return math.div($pixels, $context) * 1rem;
+}
+
+// Lighten color by percentage
+@function lighten-color($color, $amount) {
+  @return lighten($color, $amount);
+}
+
+// Darken color by percentage
+@function darken-color($color, $amount) {
+  @return darken($color, $amount);
+}
+
+// Create a responsive breakpoint
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: $breakpoint-xs) { @content; }
+  } @else if $breakpoint == sm {
+    @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: $breakpoint-lg) { @content; }
+  }
 }

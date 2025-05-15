@@ -1,0 +1,22 @@
+<div class="workers-list">
+  <h2>Workers</h2>
+  
+  @if (errorMessage()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+      <button (click)="retryLoadWorkers()">Retry</button>
+    </div>
+  }
+  
+  <ul>
+    @for (worker of workers(); track worker.id) {
+      <li 
+        [class.selected]="isSelected(worker)"
+        (click)="selectWorker(worker)">
+        {{ worker.name }}
+      </li>
+    } @empty {
+      <li class="empty-list">No workers found</li>
+    }
+  </ul>
+</div> 

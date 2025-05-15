@@ -68,7 +68,8 @@
               "buildTarget": "quest:build:production"
             },
             "development": {
-              "buildTarget": "quest:build:development"
+              "buildTarget": "quest:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

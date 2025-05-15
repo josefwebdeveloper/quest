@@ -1,3 +1,20 @@
-
-
-<router-outlet />
+<div class="app-container">
+  <header>
+    <h1>{{ title }}</h1>
+  </header>
+  
+  <main>
+    <div class="app-layout">
+      <div class="sidebar">
+        <app-workers-list></app-workers-list>
+      </div>
+      
+      <div class="content">
+        <app-flights-table></app-flights-table>
+        <app-flight-details></app-flight-details>
+      </div>
+    </div>
+  </main>
+  
+  <router-outlet />
+</div>

@@ -1,0 +1,39 @@
+<div class="flights-table">
+  <h2>Flights of {{ workerName() }}</h2>
+  
+  @if (errorMessage()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+      <button (click)="retryLoadFlights()">Retry</button>
+    </div>
+  } @else if (isLoading()) {
+    <div class="loading">Loading flights...</div>
+  } @else if (flights().length === 0) {
+    <div class="no-data">No flights found for this worker</div>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Flight Number</th>
+          <th>Origin</th>
+          <th>Origin Date</th>
+          <th>Destination</th>
+          <th>Destination Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (flight of flights(); track flight.id) {
+          <tr 
+            [class.selected]="isSelected(flight)"
+            (click)="selectFlight(flight)">
+            <td>{{ flight.plane }}</td>
+            <td>{{ flight.from }}</td>
+            <td>{{ flight.from_date }}</td>
+            <td>{{ flight.to }}</td>
+            <td>{{ flight.to_date }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div> 
