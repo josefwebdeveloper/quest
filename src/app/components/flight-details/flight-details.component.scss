@@ -139,8 +139,10 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       border-radius: get-rem(2);
     }
     
-    scrollbar-width: thin;
-    scrollbar-color: $shadow-color-medium transparent;
+    & {
+      scrollbar-width: thin;
+      scrollbar-color: $shadow-color-medium transparent;
+    }
     
     .flight-summary {
       margin-bottom: get-rem(16);

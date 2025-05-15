@@ -187,9 +187,11 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       border-radius: get-rem(2);
     }
 
-    // Firefox scrollbar
-    scrollbar-width: thin;
-    scrollbar-color: $shadow-color-medium transparent;
+    // Firefox scrollbar - wrapped in & {} to fix deprecation warning
+    & {
+      scrollbar-width: thin;
+      scrollbar-color: $shadow-color-medium transparent;
+    }
   }
 
   table {

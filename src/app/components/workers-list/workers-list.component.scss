@@ -152,9 +152,11 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       border-radius: get-rem(2);
     }
     
-    // Hide scrollbar for Firefox
-    scrollbar-width: thin;
-    scrollbar-color: $shadow-color_medium transparent;
+    // Hide scrollbar for Firefox - wrapped in & {} to fix deprecation warning
+    & {
+      scrollbar-width: thin;
+      scrollbar-color: $shadow-color-medium transparent;
+    }
 
     li {
       padding: get-rem(6) get-rem(10);
@@ -187,7 +189,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       &:hover {
         background-color: $background-lighter;
         transform: translateY(get-rem(-1));
-        box-shadow: 0 get-rem(2) get-rem(4) $shadow-color_medium;
+        box-shadow: 0 get-rem(2) get-rem(4) $shadow-color-medium;
       }
 
       &.selected {
