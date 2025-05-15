@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, map, tap } from 'rxjs';
 import { Worker } from '../models/worker.model';
 import { Flight } from '../models/flight.model';
 import { ErrorHandlerService } from './error-handler.service';
@@ -22,11 +22,21 @@ export class FlightService {
   
   // Error message signal
   errorMessage = signal<string | null>(null);
+  
+  // Store the workers list
+  private workers = signal<Worker[]>([]);
+  
+  // Flag to track if workers are loaded
+  private workersLoaded = signal<boolean>(false);
 
   getWorkers(): Observable<Worker[]> {
     this.errorMessage.set(null);
     return this.http.get<Worker[]>(this.workersUrl)
       .pipe(
+        tap(workers => {
+          this.workers.set(workers);
+          this.workersLoaded.set(true);
+        }),
         catchError(error => {
           this.errorMessage.set('Failed to load workers. Please try again later.');
           return this.errorHandler.handleError(error);
@@ -43,6 +53,22 @@ export class FlightService {
           return this.errorHandler.handleError(error);
         })
       );
+  }
+  
+  // Check if workers are already loaded
+  hasWorkersLoaded(): boolean {
+    return this.workersLoaded();
+  }
+  
+  // Get all workers
+  getAllWorkers(): Worker[] {
+    return this.workers();
+  }
+  
+  // Get a worker by ID
+  getWorkerById(id: number): Worker | null {
+    const workers = this.workers();
+    return workers.find(worker => worker.id === id) || null;
   }
 
   setSelectedWorker(worker: Worker | null): void {

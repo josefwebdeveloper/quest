@@ -12,6 +12,68 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## CORS Handling
+
+### Local Development
+
+During local development, the application uses Angular's built-in proxy configuration to handle CORS issues. This is configured in `src/proxy.conf.json` and enabled in `angular.json`.
+
+To run with the proxy enabled:
+
+```bash
+ng serve
+```
+
+This will route all API requests through the development server, bypassing CORS restrictions.
+
+### Vercel Deployment
+
+When deployed to Vercel, the application uses a combination of approaches to handle CORS issues:
+
+1. **Vercel Rewrites**: Configured in `vercel.json`, this approach forwards API requests to the original endpoint.
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://128.24.65.53:3000/:path*"
+    }
+  ]
+}
+```
+
+2. **Serverless Functions**: Located in the `/api` folder, these Node.js functions serve as proxies for API requests.
+
+3. **CORS Headers**: Custom headers are added to responses to allow cross-origin requests.
+
+```json
+{
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        // Other CORS headers...
+      ]
+    }
+  ]
+}
+```
+
+4. **Angular Routing Support**: The configuration includes a fallback to ensure Angular routing works correctly.
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:

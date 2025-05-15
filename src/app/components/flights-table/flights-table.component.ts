@@ -1,5 +1,6 @@
 import { Component, OnDestroy, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Flight } from '../../shared/models/flight.model';
 import { interval, Subscription } from 'rxjs';
@@ -14,6 +15,7 @@ import { takeWhile } from 'rxjs/operators';
 })
 export class FlightsTableComponent implements OnDestroy {
   private flightService = inject(FlightService);
+  private route = inject(ActivatedRoute);
   private refreshSubscription?: Subscription;
   
   flights = signal<Flight[]>([]);
@@ -25,6 +27,19 @@ export class FlightsTableComponent implements OnDestroy {
   
   // Start timer and load flights when worker changes
   constructor() {
+    // Listen for route parameter changes
+    this.route.parent?.paramMap.subscribe(params => {
+      const workerId = params.get('id');
+      if (workerId) {
+        const id = parseInt(workerId, 10);
+        const worker = this.flightService.getWorkerById(id);
+        
+        if (worker && worker.id !== this.flightService.selectedWorker()?.id) {
+          this.flightService.setSelectedWorker(worker);
+        }
+      }
+    });
+    
     // Create an effect to react to worker selection changes
     effect(() => {
       const selectedWorker = this.flightService.selectedWorker();
