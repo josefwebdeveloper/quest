@@ -1,8 +1,9 @@
 @use "../../../../public/assets/styles/functions" as *;
+@use "../../../../public/assets/styles/variables" as *;
 
 // Breakpoints
-$mobile-breakpoint: 768px;
-$small-mobile-breakpoint: 480px;
+$mobile-breakpoint: $mobile-breakpoint;
+$small-mobile-breakpoint: $small-mobile-breakpoint;
 
 .app-container {
   display: flex;
@@ -11,10 +12,10 @@ $small-mobile-breakpoint: 480px;
   overflow: hidden;
   
   header {
-    background: linear-gradient(to right, #2e7d32, #4caf50);
+    background: linear-gradient(to right, $primary-gradient-start, $primary-gradient-end);
     color: white;
     padding: get-rem(12);
-    box-shadow: 0 get-rem(2) get-rem(4) rgba(0, 0, 0, 0.1);
+    box-shadow: 0 get-rem(2) get-rem(4) $shadow-color-medium;
     z-index: 10;
     height: get-rem(48);
     display: flex;
@@ -50,9 +51,9 @@ $small-mobile-breakpoint: 480px;
     
     .sidebar {
       width: get-rem(250);
-      background-color: #f0ffe0;
-      border-right: 1px solid #c8e6c9;
-      box-shadow: get-rem(2) 0 get-rem(5) rgba(0, 0, 0, 0.05);
+      background-color: $primary-background;
+      border-right: 1px solid $primary-border;
+      box-shadow: get-rem(2) 0 get-rem(5) $shadow-color;
       z-index: 5;
       overflow: hidden;
       
@@ -61,7 +62,7 @@ $small-mobile-breakpoint: 480px;
         height: get-rem(120);
         min-height: get-rem(120);
         border-right: none;
-        border-bottom: 1px solid #c8e6c9;
+        border-bottom: 1px solid $primary-border;
       }
       
       @media (max-width: $small-mobile-breakpoint) {

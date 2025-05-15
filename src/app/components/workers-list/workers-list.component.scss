@@ -1,14 +1,15 @@
 @use "../../../../public/assets/styles/functions" as *;
+@use "../../../../public/assets/styles/variables" as *;
 
 // Breakpoints
-$mobile-breakpoint: 768px;
-$small-mobile-breakpoint: 480px;
+$mobile-breakpoint: $mobile-breakpoint;
+$small-mobile-breakpoint: $small-mobile-breakpoint;
 
 .workers-list {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #f0ffe0;
+  background-color: $primary-background;
   overflow: hidden;
   position: relative;
   
@@ -18,7 +19,7 @@ $small-mobile-breakpoint: 480px;
     align-items: center;
     margin-bottom: get-rem(10);
     padding: get-rem(10) get-rem(16);
-    border-bottom: get-rem(1) solid #e0e0e0;
+    border-bottom: get-rem(1) solid $border-light;
     min-height: get-rem(46);
     
     @media (max-width: $mobile-breakpoint) {
@@ -34,7 +35,7 @@ $small-mobile-breakpoint: 480px;
     
     h2 {
       margin: 0;
-      color: #2e7d32;
+      color: $primary-dark;
       font-size: get-rem(16);
       font-weight: 500;
       
@@ -45,7 +46,7 @@ $small-mobile-breakpoint: 480px;
     
     .workers-count {
       .counter {
-        background-color: #4caf50;
+        background-color: $primary-color;
         color: white;
         border-radius: 50%;
         width: get-rem(24);
@@ -68,10 +69,10 @@ $small-mobile-breakpoint: 480px;
   .error-message {
     padding: get-rem(12);
     margin: 0 get-rem(12) get-rem(12);
-    background-color: #fff4e5;
-    border-left: get-rem(4) solid #ff9800;
+    background-color: $warning-background;
+    border-left: get-rem(4) solid $warning-light;
     border-radius: get-rem(4);
-    color: #e65100;
+    color: $warning-deeper;
     display: flex;
     align-items: flex-start;
     animation: slideIn 0.3s ease-out;
@@ -103,7 +104,7 @@ $small-mobile-breakpoint: 480px;
 
     button {
       padding: get-rem(4) get-rem(10);
-      background-color: #ff9800;
+      background-color: $warning-light;
       color: white;
       border: none;
       border-radius: get-rem(4);
@@ -112,7 +113,7 @@ $small-mobile-breakpoint: 480px;
       font-size: get-rem(12);
 
       &:hover {
-        background-color: #f57c00;
+        background-color: $warning-dark;
         transform: translateY(get-rem(-1));
       }
       
@@ -147,13 +148,13 @@ $small-mobile-breakpoint: 480px;
     }
     
     &::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: $shadow-color-medium;
       border-radius: get-rem(2);
     }
     
     // Hide scrollbar for Firefox
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+    scrollbar-color: $shadow-color_medium transparent;
 
     li {
       padding: get-rem(6) get-rem(10);
@@ -163,8 +164,8 @@ $small-mobile-breakpoint: 480px;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      background-color: white;
-      box-shadow: 0 get-rem(1) get-rem(2) rgba(0, 0, 0, 0.05);
+      background-color: $background-color;
+      box-shadow: 0 get-rem(1) get-rem(2) $shadow-color;
       height: get-rem(32);
       
       @media (max-width: $mobile-breakpoint) {
@@ -184,31 +185,31 @@ $small-mobile-breakpoint: 480px;
       }
 
       &:hover {
-        background-color: #f5f5f5;
+        background-color: $background-lighter;
         transform: translateY(get-rem(-1));
-        box-shadow: 0 get-rem(2) get-rem(4) rgba(0, 0, 0, 0.1);
+        box-shadow: 0 get-rem(2) get-rem(4) $shadow-color_medium;
       }
 
       &.selected {
-        background-color: #e8f5e9;
-        border-left: get-rem(3) solid #4caf50;
+        background-color: $success-background;
+        border-left: get-rem(3) solid $primary-color;
         padding-left: get-rem(9);
         
         @media (max-width: $mobile-breakpoint) {
           border-left: none;
-          border-bottom: get-rem(3) solid #4caf50;
+          border-bottom: get-rem(3) solid $primary-color;
           padding-left: get-rem(10);
           padding-bottom: get-rem(5);
         }
         
         .worker-avatar {
-          background-color: #4caf50;
+          background-color: $primary-color;
           color: white;
         }
         
         .worker-name {
           font-weight: 500;
-          color: #2e7d32;
+          color: $primary-dark;
         }
       }
       
@@ -216,8 +217,8 @@ $small-mobile-breakpoint: 480px;
         width: get-rem(24);
         height: get-rem(24);
         border-radius: 50%;
-        background-color: #c8e6c9;
-        color: #2e7d32;
+        background-color: $primary-light;
+        color: $primary-dark;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -243,7 +244,7 @@ $small-mobile-breakpoint: 480px;
         
         .worker-name {
           font-size: get-rem(13);
-          color: #424242;
+          color: $text-dark;
           
           @media (max-width: $small-mobile-breakpoint) {
             font-size: get-rem(12);
