@@ -33,6 +33,8 @@ export class FlightService {
     this.errorMessage.set(null);
     return this.http.get<Worker[]>(this.workersUrl)
       .pipe(
+        // Ensure each worker has a valid ID
+        map(workers => workers.filter(worker => worker && worker.id !== undefined && worker.id !== null)),
         tap(workers => {
           this.workers.set(workers);
           this.workersLoaded.set(true);
@@ -48,6 +50,18 @@ export class FlightService {
     this.errorMessage.set(null);
     return this.http.get<Flight[]>(`${this.flightsBaseUrl}/${workerId}`)
       .pipe(
+        // Ensure each flight has a valid ID
+        map(flights => {
+          return flights
+            .filter(flight => flight !== null && flight !== undefined)
+            .map((flight, index) => {
+              // If ID is missing or empty, generate a temporary one based on index
+              if (!flight.id) {
+                return { ...flight, id: `temp-${workerId}-${index}` };
+              }
+              return flight;
+            });
+        }),
         catchError(error => {
           this.errorMessage.set(`Failed to load flights for worker #${workerId}. Please try again later.`);
           return this.errorHandler.handleError(error);

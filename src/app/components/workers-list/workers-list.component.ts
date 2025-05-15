@@ -70,6 +70,11 @@ export class WorkersListComponent implements OnInit {
   }
   
   selectWorker(worker: Worker): void {
+    if (!worker || worker.id === undefined || worker.id === null) {
+      console.warn('Attempted to select an invalid worker');
+      return;
+    }
+    
     // Set the selected worker in the service
     this.flightService.setSelectedWorker(worker);
     
@@ -78,6 +83,15 @@ export class WorkersListComponent implements OnInit {
   }
   
   isSelected(worker: Worker): boolean {
-    return this.flightService.selectedWorker()?.id === worker.id;
+    if (!worker || worker.id === undefined || worker.id === null) {
+      return false;
+    }
+    
+    const selectedWorker = this.flightService.selectedWorker();
+    if (!selectedWorker || selectedWorker.id === undefined || selectedWorker.id === null) {
+      return false;
+    }
+    
+    return selectedWorker.id === worker.id;
   }
 } 

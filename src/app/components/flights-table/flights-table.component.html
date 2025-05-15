@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (flight of flights(); track flight.id) {
+        @for (flight of flights(); track $index) {
           <tr 
             [class.selected]="isSelected(flight)"
             (click)="selectFlight(flight)">

@@ -85,11 +85,25 @@ export class FlightsTableComponent implements OnDestroy {
   }
   
   selectFlight(flight: Flight): void {
+    if (!flight || !flight.id) {
+      console.warn('Attempted to select an invalid flight');
+      return;
+    }
+    
     this.flightService.setSelectedFlight(flight);
   }
   
   isSelected(flight: Flight): boolean {
-    return this.flightService.selectedFlight()?.id === flight.id;
+    if (!flight || !flight.id) {
+      return false;
+    }
+    
+    const selectedFlight = this.flightService.selectedFlight();
+    if (!selectedFlight || !selectedFlight.id) {
+      return false;
+    }
+    
+    return selectedFlight.id === flight.id;
   }
   
   private startRefreshTimer(): void {

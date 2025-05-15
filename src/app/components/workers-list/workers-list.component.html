@@ -9,7 +9,7 @@
   }
   
   <ul>
-    @for (worker of workers(); track worker.id) {
+    @for (worker of workers(); track $index) {
       <li 
         [class.selected]="isSelected(worker)"
         (click)="selectWorker(worker)">
