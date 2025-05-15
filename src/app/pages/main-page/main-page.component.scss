@@ -1,5 +1,9 @@
 @use "../../../../public/assets/styles/functions" as *;
 
+// Breakpoints
+$mobile-breakpoint: 768px;
+$small-mobile-breakpoint: 480px;
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -15,11 +19,16 @@
     height: get-rem(48);
     display: flex;
     align-items: center;
+    justify-content: center;
     
     h1 {
       margin: 0;
       font-size: get-rem(18);
       font-weight: 500;
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        font-size: get-rem(16);
+      }
     }
   }
   
@@ -35,6 +44,10 @@
     flex: 1;
     overflow: hidden;
     
+    @media (max-width: $mobile-breakpoint) {
+      flex-direction: column;
+    }
+    
     .sidebar {
       width: get-rem(250);
       background-color: #f0ffe0;
@@ -42,6 +55,19 @@
       box-shadow: get-rem(2) 0 get-rem(5) rgba(0, 0, 0, 0.05);
       z-index: 5;
       overflow: hidden;
+      
+      @media (max-width: $mobile-breakpoint) {
+        width: 100%;
+        height: get-rem(200);
+        min-height: get-rem(200);
+        border-right: none;
+        border-bottom: 1px solid #c8e6c9;
+      }
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        height: get-rem(180);
+        min-height: get-rem(180);
+      }
     }
     
     .content {
@@ -55,10 +81,19 @@
         flex: 1;
         overflow: hidden;
         
+        @media (max-width: $mobile-breakpoint) {
+          flex-direction: column;
+        }
+        
         app-flights-table {
           flex: 3;
           min-width: 0;
           overflow: hidden;
+          
+          @media (max-width: $mobile-breakpoint) {
+            flex: 1;
+            min-height: get-rem(350);
+          }
         }
         
         app-flight-details {
@@ -66,6 +101,19 @@
           min-width: get-rem(350);
           max-width: get-rem(380);
           overflow: hidden;
+          
+          @media (max-width: $mobile-breakpoint) {
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+            height: get-rem(300);
+            min-height: get-rem(300);
+          }
+          
+          @media (max-width: $small-mobile-breakpoint) {
+            height: get-rem(280);
+            min-height: get-rem(280);
+          }
         }
       }
     }

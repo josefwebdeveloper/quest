@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject, signal, computed, effect, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, inject, signal, computed, effect, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-flights-table',
@@ -31,15 +32,20 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./flights-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FlightsTableComponent implements OnInit, OnDestroy {
+export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private flightService = inject(FlightService);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+  private breakpointObserver = inject(BreakpointObserver);
   private destroy$ = new Subject<void>();
   
   // Table related properties
   displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
+  mobileDisplayedColumns: string[] = ['plane', 'from', 'to'];
   dataSource: MatTableDataSource<Flight> = new MatTableDataSource<Flight>([]);
+  
+  // Mobile view flag
+  isMobile = signal<boolean>(false);
   
   // Sorting properties
   sortColumn = 'from_date';
@@ -51,6 +57,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy {
   // Computed properties
   workerName = computed(() => this.flightService.selectedWorker()?.name || 'No worker selected');
   errorMessage = computed(() => this.flightService.errorMessage());
+  activeColumns = computed(() => this.isMobile() ? this.mobileDisplayedColumns : this.displayedColumns);
   
   ngOnInit() {
     // Default filtering
@@ -65,6 +72,17 @@ export class FlightsTableComponent implements OnInit, OnDestroy {
     
     // Apply initial sort
     this.sortData(this.sortColumn);
+  }
+  
+  ngAfterViewInit() {
+    // Monitor viewport size changes
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => {
+        this.isMobile.set(result.matches);
+        this.cdr.detectChanges();
+      });
   }
   
   // Parse date in DD/MM/YYYY format to a Date object

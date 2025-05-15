@@ -30,7 +30,7 @@
             <!-- Flight Number Column -->
             <ng-container matColumnDef="plane">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('plane')" class="sortable-header">
-                Flight Number
+                Flight
                 <span class="sort-icon">
                   @if (sortColumn === 'plane') {
                     @if (sortDirection === 'asc') {
@@ -66,13 +66,14 @@
                   [class.selected-row]="isSelected(flight)"
                   (click)="selectFlight(flight)">
                 {{ flight.from }}
+                <div class="mobile-date" *ngIf="isMobile()">{{ flight.from_date }}</div>
               </td>
             </ng-container>
             
             <!-- Origin Date Column -->
             <ng-container matColumnDef="from_date">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('from_date')" class="sortable-header">
-                Origin Date
+                Date
                 <span class="sort-icon">
                   @if (sortColumn === 'from_date') {
                     @if (sortDirection === 'asc') {
@@ -108,13 +109,14 @@
                   [class.selected-row]="isSelected(flight)"
                   (click)="selectFlight(flight)">
                 {{ flight.to }}
+                <div class="mobile-date" *ngIf="isMobile()">{{ flight.to_date }}</div>
               </td>
             </ng-container>
             
             <!-- Destination Date Column -->
             <ng-container matColumnDef="to_date">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('to_date')" class="sortable-header">
-                Destination Date
+                Date
                 <span class="sort-icon">
                   @if (sortColumn === 'to_date') {
                     @if (sortDirection === 'asc') {
@@ -132,14 +134,14 @@
               </td>
             </ng-container>
             
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-            <tr mat-row *matRowDef="let flight; columns: displayedColumns;"
+            <tr mat-header-row *matHeaderRowDef="activeColumns(); sticky: true"></tr>
+            <tr mat-row *matRowDef="let flight; columns: activeColumns();"
                 [class.selected-row]="isSelected(flight)"
                 (click)="selectFlight(flight)"></tr>
                 
             <!-- Row shown when there is no matching data -->
             <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="5">No data matching the filter</td>
+              <td class="mat-cell" [attr.colspan]="activeColumns().length">No data matching the filter</td>
             </tr>
           </table>
         </div>

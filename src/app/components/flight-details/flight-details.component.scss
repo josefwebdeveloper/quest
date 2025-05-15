@@ -1,5 +1,9 @@
 @use "../../../../public/assets/styles/functions" as *;
 
+// Breakpoints
+$mobile-breakpoint: 768px;
+$small-mobile-breakpoint: 480px;
+
 .flight-details {
   height: 100%;
   display: flex;
@@ -7,6 +11,11 @@
   overflow: hidden;
   background-color: #f5fff0;
   border-left: get-rem(1) solid #e0e0e0;
+  
+  @media (max-width: $mobile-breakpoint) {
+    border-left: none;
+    border-top: get-rem(1) solid #e0e0e0;
+  }
 
   .header {
     display: flex;
@@ -17,11 +26,25 @@
     border-bottom: get-rem(1) solid #e0e0e0;
     min-height: get-rem(56);
     
+    @media (max-width: $mobile-breakpoint) {
+      padding: get-rem(10) get-rem(12);
+      min-height: get-rem(50);
+    }
+    
+    @media (max-width: $small-mobile-breakpoint) {
+      padding: get-rem(8) get-rem(10);
+      min-height: get-rem(46);
+    }
+    
     h2 {
       margin: 0;
       font-size: get-rem(16);
       font-weight: 500;
       color: #2e7d32;
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        font-size: get-rem(14);
+      }
     }
     
     .flight-badge {
@@ -33,6 +56,11 @@
       font-size: get-rem(13);
       box-shadow: 0 get-rem(1) get-rem(3) rgba(0, 0, 0, 0.1);
       animation: fadeIn 0.3s ease-in-out;
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        font-size: get-rem(12);
+        padding: get-rem(3) get-rem(8);
+      }
     }
   }
 
@@ -47,16 +75,29 @@
     flex: 1;
     text-align: center;
     
+    @media (max-width: $mobile-breakpoint) {
+      padding: get-rem(12);
+    }
+    
     .icon {
       font-size: get-rem(32);
       margin-bottom: get-rem(12);
       opacity: 0.6;
       animation: float 3s ease-in-out infinite;
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        font-size: get-rem(28);
+        margin-bottom: get-rem(8);
+      }
     }
     
     p {
       font-size: get-rem(14);
       margin: 0;
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        font-size: get-rem(13);
+      }
     }
   }
 
@@ -72,6 +113,16 @@
     animation: fadeIn 0.3s ease-in-out;
     min-height: 0;
     overflow: auto;
+    
+    @media (max-width: $mobile-breakpoint) {
+      padding: get-rem(10) get-rem(12);
+      margin: 0 get-rem(8) get-rem(8);
+    }
+    
+    @media (max-width: $small-mobile-breakpoint) {
+      padding: get-rem(8) get-rem(10);
+      margin: 0 get-rem(6) get-rem(6);
+    }
     
     &::-webkit-scrollbar {
       width: get-rem(4);
@@ -94,6 +145,10 @@
       display: flex;
       justify-content: center;
       
+      @media (max-width: $mobile-breakpoint) {
+        margin-bottom: get-rem(12);
+      }
+      
       .duration-indicator {
         text-align: center;
         padding: get-rem(12) get-rem(16);
@@ -101,9 +156,21 @@
         border-radius: get-rem(8);
         color: #2e7d32;
         
+        @media (max-width: $mobile-breakpoint) {
+          padding: get-rem(10) get-rem(12);
+        }
+        
+        @media (max-width: $small-mobile-breakpoint) {
+          padding: get-rem(8) get-rem(10);
+        }
+        
         .duration-value {
           font-size: get-rem(20);
           font-weight: 500;
+          
+          @media (max-width: $small-mobile-breakpoint) {
+            font-size: get-rem(18);
+          }
         }
         
         .duration-label {
@@ -112,12 +179,20 @@
           letter-spacing: get-rem(0.5);
           margin-top: get-rem(4);
           color: #4caf50;
+          
+          @media (max-width: $small-mobile-breakpoint) {
+            font-size: get-rem(10);
+          }
         }
       }
     }
     
     .detail-section {
       margin-bottom: get-rem(16);
+      
+      @media (max-width: $mobile-breakpoint) {
+        margin-bottom: get-rem(12);
+      }
       
       .section-title {
         font-weight: 500;
@@ -155,6 +230,11 @@
       padding: get-rem(12) 0;
       margin: get-rem(8) 0 get-rem(12);
       
+      @media (max-width: $mobile-breakpoint) {
+        padding: get-rem(8) 0;
+        margin: get-rem(6) 0 get-rem(10);
+      }
+      
       .path-line {
         height: get-rem(2);
         background: linear-gradient(to right, #c8e6c9, #4caf50);
@@ -175,6 +255,10 @@
       display: flex;
       justify-content: flex-end;
       border-top: get-rem(1) solid #f0f0f0;
+      
+      @media (max-width: $mobile-breakpoint) {
+        padding-top: get-rem(10);
+      }
       
       .status-badge {
         background-color: #c8e6c9;
