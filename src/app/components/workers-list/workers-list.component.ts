@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Worker } from '../../shared/models/worker.model';
 import { Subject, takeUntil } from 'rxjs';
+import { LoaderService } from '../../shared/services/loader.service';
 
 @Component({
   selector: 'app-workers-list',
@@ -17,6 +18,8 @@ export class WorkersListComponent implements OnInit, OnDestroy {
   private flightService = inject(FlightService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+  private loaderService = inject(LoaderService);
   
   private destroy$ = new Subject<void>();
   
@@ -30,11 +33,15 @@ export class WorkersListComponent implements OnInit, OnDestroy {
   }
   
   loadWorkers(): void {
+    // Only use global loader
+    this.loaderService.show();
+    
     this.flightService.getWorkers()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
           this.workers.set(data);
+          this.loaderService.hide();
           
           // Check if there's a currently selected worker
           const selectedWorker = this.flightService.selectedWorker();
@@ -65,9 +72,13 @@ export class WorkersListComponent implements OnInit, OnDestroy {
                 }
               });
           }
+          
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Error in worker component:', err);
+          this.loaderService.hide();
+          this.cdr.detectChanges();
         }
       });
   }

@@ -10,7 +10,8 @@ $small-mobile-breakpoint: 480px;
   flex-direction: column;
   background-color: #f0ffe0;
   overflow: hidden;
-
+  position: relative;
+  
   .header {
     display: flex;
     justify-content: space-between;
@@ -289,5 +290,16 @@ $small-mobile-breakpoint: 480px;
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translateY(get-rem(-10)) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

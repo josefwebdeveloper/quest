@@ -10,6 +10,7 @@ $small-mobile-breakpoint: 480px;
   flex-direction: column;
   overflow: hidden;
   padding: get-rem(24);
+  position: relative;
   
   @media (max-width: $mobile-breakpoint) {
     padding: get-rem(12);
@@ -373,5 +374,16 @@ $small-mobile-breakpoint: 480px;
   }
   100% {
     opacity: 0.6;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translateY(get-rem(-10)) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

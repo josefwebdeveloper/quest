@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { LoaderService } from '../../shared/services/loader.service';
 
 @Component({
   selector: 'app-flights-table',
@@ -37,7 +38,13 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private breakpointObserver = inject(BreakpointObserver);
+  private loaderService = inject(LoaderService);
   private destroy$ = new Subject<void>();
+  
+  // Cache for API responses
+  private flightsCache = new Map<number, Flight[]>();
+  private lastFetchTime = new Map<number, number>();
+  private readonly CACHE_TTL = 30 * 1000; // 30 seconds cache TTL (was 5 minutes)
   
   // Table related properties
   displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
@@ -190,43 +197,77 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   
   loadFlights(workerId: number): void {
+    const currentTime = Date.now();
+    const cachedData = this.flightsCache.get(workerId);
+    const lastFetch = this.lastFetchTime.get(workerId) || 0;
+    
+    // Show local loader
     this.isLoading.set(true);
+    
+    // Use cached data if it exists and isn't expired
+    if (cachedData && (currentTime - lastFetch) < this.CACHE_TTL) {
+      console.log('Using cached flight data');
+      
+      if (!this.haveFlightsChanged(cachedData, this.flights())) {
+        console.log('Cached data matches current data, no UI update needed');
+        this.isLoading.set(false);
+        return;
+      }
+      
+      this.updateFlightsDisplay(cachedData);
+      return;
+    }
+    
+    // Show global loader only for actual API calls
+    this.loaderService.show();
     
     this.flightService.getFlightsByWorkerId(workerId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
+          // Update cache
+          this.flightsCache.set(workerId, [...data]);
+          this.lastFetchTime.set(workerId, currentTime);
+          
           const hasDataChanged = this.haveFlightsChanged(data, this.flights());
           
           // Проверяем, изменились ли данные
           if (hasDataChanged) {
             console.log('Данные полетов изменились, обновляем UI');
-            this.flights.set(data);
-            this.dataSource.data = data;
-            
-            // Re-apply current sort
-            this.sortData(this.sortColumn);
-            
-            // Auto-select the first flight if there's data and no flight is selected
-            if (data.length > 0 && !this.flightService.selectedFlight()) {
-              this.selectFlight(data[0]);
-            }
+            this.updateFlightsDisplay(data);
           } else {
             console.log('Данные полетов не изменились, пропускаем обновление UI');
+            this.isLoading.set(false);
+            this.cdr.detectChanges();
           }
           
-          // Всегда отключаем индикатор загрузки
-          this.isLoading.set(false);
-          
-          // Trigger change detection to update the view
-          this.cdr.detectChanges();
+          // Hide global loader
+          this.loaderService.hide();
         },
         error: (err) => {
           console.error('Error loading flights:', err);
           this.isLoading.set(false);
+          this.loaderService.hide();
           this.cdr.detectChanges();
         }
       });
+  }
+  
+  // Helper method to update the flights display
+  private updateFlightsDisplay(data: Flight[]): void {
+    this.flights.set(data);
+    this.dataSource.data = data;
+    
+    // Re-apply current sort
+    this.sortData(this.sortColumn);
+    
+    // Auto-select the first flight if there's data and no flight is selected
+    if (data.length > 0 && !this.flightService.selectedFlight()) {
+      this.selectFlight(data[0]);
+    }
+    
+    this.isLoading.set(false);
+    this.cdr.detectChanges();
   }
   
   /**
@@ -305,6 +346,11 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => {
         const workerId = this.flightService.selectedWorker()?.id;
         if (workerId) {
+          // Force cache invalidation on timer refresh
+          this.lastFetchTime.delete(workerId);
+          // Force service cache invalidation as well
+          this.flightService.clearFlightsCache(workerId);
+          console.log(`Minute timer: forcing refresh for worker ${workerId}`);
           this.loadFlights(workerId);
         }
       });

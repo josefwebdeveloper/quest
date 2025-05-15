@@ -58,15 +58,15 @@ $small-mobile-breakpoint: 480px;
       
       @media (max-width: $mobile-breakpoint) {
         width: 100%;
-        height: get-rem(150);
-        min-height: get-rem(150);
+        height: get-rem(120);
+        min-height: get-rem(120);
         border-right: none;
         border-bottom: 1px solid #c8e6c9;
       }
       
       @media (max-width: $small-mobile-breakpoint) {
-        height: get-rem(130);
-        min-height: get-rem(130);
+        height: get-rem(110);
+        min-height: get-rem(110);
       }
     }
     

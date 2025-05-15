@@ -3,30 +3,25 @@
     <mat-card-header>
       <mat-card-title>Flights of {{ workerName() }}</mat-card-title>
     </mat-card-header>
-    
+
     <mat-card-content>
       @if (errorMessage()) {
         <div class="error-message">
           {{ errorMessage() }}
           <button mat-raised-button color="warn" (click)="retryLoadFlights()">Retry</button>
         </div>
-      } @else if (isLoading()) {
-        <div class="loading-container">
-          <mat-spinner diameter="40"></mat-spinner>
-          <p>Loading flights...</p>
-        </div>
-      } @else if (dataSource.data.length === 0) {
-        <div class="no-data">No flights found for this worker</div>
+      } @else if (dataSource.data.length === 0 && !isLoading()) {
+<!--        <div class="no-data">No flights found for this worker</div>-->
       } @else {
         <!-- Search Filter -->
         <mat-form-field appearance="outline" class="filter-field">
           <mat-label>Filter</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Search flights...">
         </mat-form-field>
-        
+
         <div class="table-container">
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
-            
+
             <!-- Flight Number Column -->
             <ng-container matColumnDef="plane">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('plane')" class="sortable-header">
@@ -47,7 +42,7 @@
                 {{ flight.plane }}
               </td>
             </ng-container>
-            
+
             <!-- Origin Column -->
             <ng-container matColumnDef="from">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('from')" class="sortable-header">
@@ -69,7 +64,7 @@
                 <div class="mobile-date" *ngIf="isMobile()">{{ flight.from_date }}</div>
               </td>
             </ng-container>
-            
+
             <!-- Origin Date Column -->
             <ng-container matColumnDef="from_date">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('from_date')" class="sortable-header">
@@ -90,7 +85,7 @@
                 {{ flight.from_date }}
               </td>
             </ng-container>
-            
+
             <!-- Destination Column -->
             <ng-container matColumnDef="to">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('to')" class="sortable-header">
@@ -112,7 +107,7 @@
                 <div class="mobile-date" *ngIf="isMobile()">{{ flight.to_date }}</div>
               </td>
             </ng-container>
-            
+
             <!-- Destination Date Column -->
             <ng-container matColumnDef="to_date">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('to_date')" class="sortable-header">
@@ -133,12 +128,12 @@
                 {{ flight.to_date }}
               </td>
             </ng-container>
-            
+
             <tr mat-header-row *matHeaderRowDef="activeColumns(); sticky: true"></tr>
             <tr mat-row *matRowDef="let flight; columns: activeColumns();"
                 [class.selected-row]="isSelected(flight)"
                 (click)="selectFlight(flight)"></tr>
-                
+
             <!-- Row shown when there is no matching data -->
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell" [attr.colspan]="activeColumns().length">No data matching the filter</td>
@@ -148,4 +143,4 @@
       }
     </mat-card-content>
   </mat-card>
-</div> 
+</div>

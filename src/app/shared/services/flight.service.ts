@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, tap, of } from 'rxjs';
+import { Observable, catchError, map, tap, of, shareReplay } from 'rxjs';
 import { Worker } from '../models/worker.model';
 import { Flight } from '../models/flight.model';
 import { ErrorHandlerService } from './error-handler.service';
@@ -33,6 +33,13 @@ export class FlightService {
   
   // Flag to track if workers are loaded
   private workersLoaded = signal<boolean>(false);
+  
+  // Track in-flight requests to prevent duplicate calls
+  private flightRequests = new Map<number, Observable<Flight[]>>();
+  
+  // Cache for recent API responses
+  private flightsCache = new Map<number, {data: Flight[], timestamp: number}>();
+  private readonly CACHE_TTL = 30 * 1000; // 30 seconds cache TTL (was 5 minutes)
 
   getWorkers(): Observable<Worker[]> {
     this.errorMessage.set(null);
@@ -68,15 +75,35 @@ export class FlightService {
   getFlightsByWorkerId(workerId: number): Observable<Flight[]> {
     this.errorMessage.set(null);
     
+    // Check if we have a valid, non-expired cached response
+    const cachedResponse = this.flightsCache.get(workerId);
+    const currentTime = Date.now();
+    
+    if (cachedResponse && (currentTime - cachedResponse.timestamp < this.CACHE_TTL)) {
+      console.log(`Using cached response for worker ${workerId}`);
+      return of(cachedResponse.data);
+    }
+    
+    // Check if there's already an in-flight request
+    const existingRequest = this.flightRequests.get(workerId);
+    if (existingRequest) {
+      console.log(`Reusing in-flight request for worker ${workerId}`);
+      return existingRequest;
+    }
+    
     if (this.useMockData) {
       // Generate 50 mock flights for testing scrolling
       const mockFlights = this.mockDataService.getMockFlights(workerId, 50);
+      
+      // Cache the mock data
+      this.flightsCache.set(workerId, {data: mockFlights, timestamp: currentTime});
       
       // Simulate network delay
       return of(mockFlights);
     }
     
-    return this.http.get<Flight[]>(`${this.flightsBaseUrl}/${workerId}`)
+    // Create a new request and store it in the map
+    const request = this.http.get<Flight[]>(`${this.flightsBaseUrl}/${workerId}`)
       .pipe(
         // Ensure each flight has a valid ID
         map(flights => {
@@ -90,11 +117,34 @@ export class FlightService {
               return flight;
             });
         }),
+        // Cache the response
+        tap(flights => {
+          this.flightsCache.set(workerId, {data: flights, timestamp: Date.now()});
+          // Remove from in-flight requests after completion
+          setTimeout(() => this.flightRequests.delete(workerId), 0);
+        }),
+        // Share the response with all subscribers
+        shareReplay(1),
         catchError(error => {
           this.errorMessage.set(`Failed to load flights for worker #${workerId}. Please try again later.`);
+          // Remove from in-flight requests on error
+          this.flightRequests.delete(workerId);
           return this.errorHandler.handleError(error);
         })
       );
+    
+    // Store the request
+    this.flightRequests.set(workerId, request);
+    return request;
+  }
+  
+  // Clear the cache for a specific worker or all workers
+  clearFlightsCache(workerId?: number): void {
+    if (workerId !== undefined) {
+      this.flightsCache.delete(workerId);
+    } else {
+      this.flightsCache.clear();
+    }
   }
   
   // Check if workers are already loaded
