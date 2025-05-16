@@ -12,11 +12,11 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
   overflow: hidden;
   padding: get-rem(24);
   position: relative;
-  
+
   @media (max-width: $mobile-breakpoint) {
     padding: get-rem(12);
   }
-  
+
   @media (max-width: $small-mobile-breakpoint) {
     padding: get-rem(8);
   }
@@ -42,17 +42,6 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     position: relative;
     z-index: 2;
 
-    &::before {
-      content: '';
-      position: absolute;
-      left: get-rem(8);
-      top: 50%;
-      transform: translateY(-50%);
-      width: get-rem(4);
-      height: 70%;
-      background-color: $accent-cyan;
-      border-radius: get-rem(2);
-    }
 
     mat-card-title {
       font-weight: 500;
@@ -61,7 +50,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       margin-left: get-rem(8);
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      
+
       @media (max-width: $small-mobile-breakpoint) {
         font-size: get-rem(14);
       }
@@ -75,7 +64,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     flex-direction: column;
     padding: get-rem(12);
     background-color: $primary-background;
-    
+
     @media (max-width: $small-mobile-breakpoint) {
       padding: get-rem(8);
     }
@@ -137,27 +126,27 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     width: 100%;
     margin-bottom: get-rem(12);
     height: get-rem(50);
-    
+
     .mat-mdc-text-field-wrapper {
       background-color: $background-color;
       border-radius: get-rem(24);
       box-shadow: 0 get-rem(1) get-rem(3) $shadow-color;
       transition: box-shadow 0.2s ease;
       min-height: get-rem(40);
-      
+
       &:hover {
         box-shadow: 0 get-rem(2) get-rem(6) $shadow-color-dark;
       }
     }
-    
+
     .mat-mdc-form-field-subscript-wrapper {
       display: none;
     }
-    
+
     input {
       transition: background-color 0.3s ease;
       height: get-rem(30);
-      
+
       &:focus {
         background-color: $background-lighter;
       }
@@ -207,12 +196,12 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       position: relative;
       padding: get-rem(10) get-rem(16);
       transition: background-color 0.2s ease, color 0.2s ease;
-      
+
       @media (max-width: $mobile-breakpoint) {
         padding: get-rem(8) get-rem(10);
         font-size: get-rem(12);
       }
-      
+
       @media (max-width: $small-mobile-breakpoint) {
         padding: get-rem(6) get-rem(8);
         font-size: get-rem(11);
@@ -246,7 +235,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       letter-spacing: get-rem(0.5);
       height: get-rem(42);
       text-align: left;
-      
+
       @media (max-width: $mobile-breakpoint) {
         padding: get-rem(8) get-rem(10);
         height: get-rem(38);
@@ -308,13 +297,13 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       line-height: 1.3;
       color: #37474f;
       font-weight: 400;
-      
+
       @media (max-width: $mobile-breakpoint) {
         padding: get-rem(12) get-rem(14);
         height: get-rem(70);
         font-size: get-rem(12);
       }
-      
+
       .mobile-date {
         font-size: get-rem(10);
         color: #78909c;
