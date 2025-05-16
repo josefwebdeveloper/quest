@@ -41,35 +41,28 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private loaderService = inject(LoaderService);
   private destroy$ = new Subject<void>();
   
-  // Keep track of timer subscription
   private timerSubscription: Subscription | null = null;
   
-  // Cache for API responses
   private flightsCache = new Map<number, Flight[]>();
   private lastFetchTime = new Map<number, number>();
   
-  // Table related properties
   displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
   mobileDisplayedColumns: string[] = ['plane', 'from', 'to'];
   dataSource: MatTableDataSource<Flight> = new MatTableDataSource<Flight>([]);
   
-  // Mobile view flag
   isMobile = signal<boolean>(false);
   
-  // Sorting properties
   sortColumn = 'from_date';
   sortDirection: 'asc' | 'desc' = 'asc';
   
   flights = signal<Flight[]>([]);
   isLoading = signal<boolean>(false);
   
-  // Computed properties
   workerName = computed(() => this.flightService.selectedWorker()?.name || 'No worker selected');
   errorMessage = computed(() => this.flightService.errorMessage());
   activeColumns = computed(() => this.isMobile() ? this.mobileDisplayedColumns : this.displayedColumns);
   
   ngOnInit() {
-    // Default filtering
     this.dataSource.filterPredicate = (data: Flight, filter: string) => {
       const searchStr = (data.plane ?? '') + 
                       (data.from ?? '') + 
@@ -79,12 +72,10 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       return searchStr.toLowerCase().includes(filter);
     };
     
-    // Apply initial sort
     this.sortData(this.sortColumn);
   }
   
   ngAfterViewInit() {
-    // Monitor viewport size changes
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(takeUntil(this.destroy$))
@@ -94,28 +85,22 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
   
-  // Parse date in DD/MM/YYYY format to a Date object
   private parseDateString(dateStr: string): Date {
     if (!dateStr) return new Date(0);
     
-    // Check if the format is DD/MM/YYYY
     const parts = dateStr.split('/');
     if (parts.length === 3) {
-      // parts[0] = day, parts[1] = month, parts[2] = year
       const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1; // Months are 0-based in JS
+      const month = parseInt(parts[1], 10) - 1;
       const year = parseInt(parts[2], 10);
       
       return new Date(year, month, day);
     }
     
-    // Fallback to standard parsing if not in expected format
     return new Date(dateStr);
   }
   
-  // Custom sorting function
   sortData(column: string) {
-    // If sorting the same column, toggle direction
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -123,12 +108,10 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.sortDirection = 'asc';
     }
     
-    // Apply the sort
     const sortedData = [...this.dataSource.data].sort((a, b) => {
       let valueA: any;
       let valueB: any;
       
-      // For date columns, use custom parser
       if (column === 'from_date' || column === 'to_date') {
         const aVal = a[column as keyof Flight] as string;
         const bVal = b[column as keyof Flight] as string;
@@ -140,23 +123,18 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         valueB = b[column as keyof Flight];
       }
       
-      // Handle undefined values
       if (valueA === undefined) valueA = '';
       if (valueB === undefined) valueB = '';
       
-      // Compare values
       const comparison = valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
       return this.sortDirection === 'asc' ? comparison : -comparison;
     });
     
-    // Update the table data
     this.dataSource.data = sortedData;
     this.cdr.detectChanges();
   }
   
-  // Start timer and load flights when worker changes
   constructor() {
-    // Listen for route parameter changes
     this.route.parent?.paramMap
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
@@ -171,11 +149,9 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     
-    // Create an effect to react to worker selection changes
     effect(() => {
       const selectedWorker = this.flightService.selectedWorker();
       if (selectedWorker) {
-        // Clear any cached data for this worker to ensure fresh data
         this.flightsCache.delete(selectedWorker.id);
         this.flightService.clearFlightsCache(selectedWorker.id);
         this.loadFlights(selectedWorker.id);
@@ -191,7 +167,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.stopRefreshTimer();
     
-    // Отписка от всех подписок одной командой
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -202,10 +177,8 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   
   loadFlights(workerId: number): void {
-    // Always make a new API call, ignore cache
     const currentTime = Date.now();
     
-    // Show both loaders
     this.isLoading.set(true);
     this.loaderService.show();
     console.log(`Loading flights for worker ${workerId}`);
@@ -214,7 +187,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          // Update cache
           this.flightsCache.set(workerId, [...data]);
           this.lastFetchTime.set(workerId, currentTime);
           
@@ -227,7 +199,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
             this.cdr.detectChanges();
           }
           
-          // Hide global loader
           this.loaderService.hide();
           console.log('Finished loading flights, loader hidden');
         },
@@ -240,15 +211,12 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
   
-  // Helper method to update the flights display
   private updateFlightsDisplay(data: Flight[]): void {
     this.flights.set(data);
     this.dataSource.data = data;
     
-    // Re-apply current sort
     this.sortData(this.sortColumn);
     
-    // Auto-select the first flight if there's data and no flight is selected
     if (data.length > 0 && !this.flightService.selectedFlight()) {
       this.selectFlight(data[0]);
     }
@@ -257,26 +225,16 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.cdr.detectChanges();
   }
   
-  /**
-   * Сравнивает два массива полетов, чтобы определить, изменились ли данные
-   * @param newFlights Новый массив полетов
-   * @param currentFlights Текущий массив полетов
-   * @returns true, если данные изменились; false, если данные идентичны
-   */
   private haveFlightsChanged(newFlights: Flight[], currentFlights: Flight[]): boolean {
-    // Быстрая проверка по длине массивов
     if (newFlights.length !== currentFlights.length) {
       return true;
     }
     
-    // Создаем карту текущих полетов для быстрого поиска
     const currentFlightsMap = new Map(currentFlights.map(flight => [flight.id, flight]));
     
-    // Проверяем каждый полет в новом массиве
     for (const newFlight of newFlights) {
       const currentFlight = currentFlightsMap.get(newFlight.id);
       
-      // Если полет не найден или какие-либо свойства различаются
       if (!currentFlight ||
           newFlight.plane !== currentFlight.plane ||
           newFlight.from !== currentFlight.from ||
@@ -290,7 +248,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     
-    // Если все проверки пройдены, данные не изменились
     return false;
   }
   
@@ -325,40 +282,31 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   
   private startRefreshTimer(): void {
-    // Clear any existing timer to prevent multiple subscriptions
     this.stopRefreshTimer();
     
-    // Use a variable to track refresh status
     let refreshInProgress = false;
     
-    // Create a new timer subscription
     this.timerSubscription = interval(60000)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         const workerId = this.flightService.selectedWorker()?.id;
         
-        // Only refresh if not already in progress and there is a selected worker
         if (workerId && !refreshInProgress) {
           console.log(`Minute timer: starting refresh for worker ${workerId}`);
           
-          // Set flag to prevent multiple refreshes
           refreshInProgress = true;
           
-          // Clear the flight service cache for this worker
           this.flightService.clearFlightsCache(workerId);
           
-          // Load flights and reset flag when done
           this.flightService.getFlightsByWorkerId(workerId)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
               next: (data) => {
                 console.log(`Refresh complete for worker ${workerId}`);
                 
-                // Update local cache
                 this.flightsCache.set(workerId, [...data]);
                 this.lastFetchTime.set(workerId, Date.now());
                 
-                // Update UI if data changed
                 const hasDataChanged = this.haveFlightsChanged(data, this.flights());
                 if (hasDataChanged) {
                   console.log('Refreshed data changed, updating UI');
@@ -368,7 +316,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.isLoading.set(false);
                 }
                 
-                // Reset flag
                 refreshInProgress = false;
               },
               error: (err) => {

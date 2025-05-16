@@ -25,7 +25,6 @@ export class WorkersListComponent implements OnInit, OnDestroy {
   
   workers = signal<Worker[]>([]);
   
-  // Computed property to get the error message from the service
   errorMessage = computed(() => this.flightService.errorMessage());
   
   ngOnInit(): void {
@@ -33,7 +32,6 @@ export class WorkersListComponent implements OnInit, OnDestroy {
   }
   
   loadWorkers(): void {
-    // Only use global loader
     this.loaderService.show();
     
     this.flightService.getWorkers()
@@ -43,31 +41,24 @@ export class WorkersListComponent implements OnInit, OnDestroy {
           this.workers.set(data);
           this.loaderService.hide();
           
-          // Check if there's a currently selected worker
           const selectedWorker = this.flightService.selectedWorker();
           
-          // Handle worker selection by route or default
           if (!selectedWorker) {
-            // Check if we have a route parameter for worker ID
             this.route.parent?.paramMap
               .pipe(takeUntil(this.destroy$))
               .subscribe(params => {
                 const workerId = params.get('id');
                 
                 if (workerId) {
-                  // Find the worker in our list
                   const id = parseInt(workerId, 10);
                   const workerFromRoute = data.find(w => w.id === id);
                   
                   if (workerFromRoute) {
-                    // Set the worker but don't navigate again
                     this.flightService.setSelectedWorker(workerFromRoute);
                   } else if (data.length > 0) {
-                    // If worker not found by route ID, select the first worker
                     this.selectWorker(data[0]);
                   }
                 } else if (data.length > 0) {
-                  // No route ID, select the first worker
                   this.selectWorker(data[0]);
                 }
               });
@@ -94,10 +85,8 @@ export class WorkersListComponent implements OnInit, OnDestroy {
       return;
     }
     
-    // Set the selected worker in the service
     this.flightService.setSelectedWorker(worker);
     
-    // Navigate to the worker-specific route
     this.router.navigate(['/workers', worker.id]);
   }
   
@@ -115,7 +104,6 @@ export class WorkersListComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // Отписка от всех подписок одной командой
     this.destroy$.next();
     this.destroy$.complete();
   }

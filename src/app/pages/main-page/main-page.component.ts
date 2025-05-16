@@ -56,7 +56,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // Отписка от всех подписок одной командой
+    // Unsubscribe from all subscriptions with one command
     this.destroy$.next();
     this.destroy$.complete();
   }
