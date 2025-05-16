@@ -23,4 +23,6 @@ export class FlightDetailsComponent {
   duration = computed(() => this.selectedFlight()?.duration || 0);
   originGate = computed(() => this.selectedFlight()?.from_gate || 'N/A');
   destinationGate = computed(() => this.selectedFlight()?.to_gate || 'N/A');
+  origin = computed(() => this.selectedFlight()?.from || 'N/A');
+  destination = computed(() => this.selectedFlight()?.to || 'N/A');
 } 
