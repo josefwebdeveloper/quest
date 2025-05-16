@@ -273,12 +273,12 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       }
 
       &.selected-row {
-        background-color: #e8f5e9;
+        background-color: $success-background;
         position: relative;
-        border-left: get-rem(4) solid #4caf50;
+        border-left: get-rem(4) solid $primary-color;
 
         td {
-          color: #1a237e;
+          color: $primary-dark;
           font-weight: 500;
         }
 
@@ -295,7 +295,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
         }
 
         &.selected-row {
-          background-color: #e8f0fe;
+          background-color: $success-background;
         }
       }
     }

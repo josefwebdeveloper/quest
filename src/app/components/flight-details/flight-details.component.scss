@@ -12,7 +12,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
   overflow: hidden;
   background-color: $primary-background;
   border-left: get-rem(1) solid $border-light;
-  
+
   @media (max-width: $mobile-breakpoint) {
     border-left: none;
     border-top: get-rem(1) solid $border-light;
@@ -26,30 +26,30 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     margin-bottom: get-rem(12);
     border-bottom: get-rem(1) solid $border-light;
     min-height: get-rem(56);
-    
+
     @media (max-width: $mobile-breakpoint) {
       padding: get-rem(8) get-rem(10);
       min-height: get-rem(40);
       margin-bottom: get-rem(6);
     }
-    
+
     @media (max-width: $small-mobile-breakpoint) {
       padding: get-rem(6) get-rem(8);
       min-height: get-rem(36);
       margin-bottom: get-rem(4);
     }
-    
+
     h2 {
       margin: 0;
       font-size: get-rem(16);
       font-weight: 500;
       color: $primary-dark;
-      
+
       @media (max-width: $small-mobile-breakpoint) {
         font-size: get-rem(14);
       }
     }
-    
+
     .flight-badge {
       background: linear-gradient(135deg, $primary-gradient-start, $primary-gradient-end);
       color: white;
@@ -58,7 +58,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       font-weight: 500;
       font-size: get-rem(13);
       box-shadow: 0 get-rem(1) get-rem(3) $shadow-color-medium;
-      
+
       @media (max-width: $small-mobile-breakpoint) {
         font-size: get-rem(11);
         padding: get-rem(2) get-rem(6);
@@ -76,27 +76,27 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     justify-content: center;
     flex: 1;
     text-align: center;
-    
+
     @media (max-width: $mobile-breakpoint) {
       padding: get-rem(12);
     }
-    
+
     .icon {
       font-size: get-rem(32);
       margin-bottom: get-rem(12);
       opacity: 0.6;
       animation: float 3s ease-in-out infinite;
-      
+
       @media (max-width: $small-mobile-breakpoint) {
         font-size: get-rem(28);
         margin-bottom: get-rem(8);
       }
     }
-    
+
     p {
       font-size: get-rem(14);
       margin: 0;
-      
+
       @media (max-width: $small-mobile-breakpoint) {
         font-size: get-rem(13);
       }
@@ -108,91 +108,90 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     margin: 0 get-rem(12) get-rem(12);
     border-radius: get-rem(8);
     background-color: $background-color;
-    flex: 1;
     display: flex;
     flex-direction: column;
     box-shadow: 0 get-rem(2) get-rem(8) $shadow-color;
     animation: fadeIn 0.3s ease-in-out;
     min-height: 0;
     overflow: auto;
-    
+
     @media (max-width: $mobile-breakpoint) {
       padding: get-rem(8) get-rem(10);
       margin: 0 get-rem(6) get-rem(6);
     }
-    
+
     @media (max-width: $small-mobile-breakpoint) {
       padding: get-rem(6) get-rem(8);
       margin: 0 get-rem(4) get-rem(4);
     }
-    
+
     &::-webkit-scrollbar {
       width: get-rem(4);
     }
-    
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
-    
+
     &::-webkit-scrollbar-thumb {
       background-color: $shadow-color-medium;
       border-radius: get-rem(2);
     }
-    
+
     & {
       scrollbar-width: thin;
       scrollbar-color: $shadow-color-medium transparent;
     }
-    
+
     .flight-summary {
       margin-bottom: get-rem(16);
       display: flex;
       justify-content: center;
-      
+
       @media (max-width: $mobile-breakpoint) {
         margin-bottom: get-rem(8);
       }
-      
+
       @media (max-width: $small-mobile-breakpoint) {
         margin-bottom: get-rem(6);
       }
-      
+
       .duration-indicator {
         text-align: center;
         padding: get-rem(12) get-rem(16);
         background-color: $success-background;
         border-radius: get-rem(8);
         color: $primary-dark;
-        
+
         @media (max-width: $mobile-breakpoint) {
           padding: get-rem(8) get-rem(10);
           border-radius: get-rem(6);
         }
-        
+
         @media (max-width: $small-mobile-breakpoint) {
           padding: get-rem(6) get-rem(8);
         }
-        
+
         .duration-value {
           font-size: get-rem(20);
           font-weight: 500;
-          
+
           @media (max-width: $mobile-breakpoint) {
             font-size: get-rem(16);
           }
-          
+
           @media (max-width: $small-mobile-breakpoint) {
             font-size: get-rem(15);
           }
         }
-        
+
         .duration-label {
           font-size: get-rem(11);
           text-transform: uppercase;
           letter-spacing: get-rem(0.5);
           margin-top: get-rem(4);
           color: $primary-color;
-          
+
           @media (max-width: $mobile-breakpoint) {
             font-size: get-rem(9);
             margin-top: get-rem(2);
@@ -201,15 +200,15 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
         }
       }
     }
-    
+
     .travel-info {
       display: flex;
       flex-direction: column;
-      
+
       @media (max-width: $mobile-breakpoint) {
         flex-direction: row;
         margin: 0 get-rem(-4);
-        
+
         .detail-section {
           flex: 1;
           margin: 0 get-rem(4);
@@ -217,14 +216,14 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
         }
       }
     }
-    
+
     .detail-section {
       margin-bottom: get-rem(12);
-      
+
       @media (max-width: $mobile-breakpoint) {
         margin-bottom: get-rem(6);
       }
-      
+
       .section-title {
         font-weight: 500;
         color: $text-dark;
@@ -232,57 +231,57 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
         font-size: get-rem(14);
         border-bottom: get-rem(1) solid $background-lightest;
         padding-bottom: get-rem(3);
-        
+
         @media (max-width: $mobile-breakpoint) {
           font-size: get-rem(12);
           margin-bottom: get-rem(4);
           padding-bottom: get-rem(2);
         }
       }
-      
+
       .detail-row {
         display: flex;
         padding: get-rem(4) 0;
-        
+
         @media (max-width: $mobile-breakpoint) {
           padding: get-rem(2) 0;
         }
-        
+
         .label {
           font-weight: 500;
           width: get-rem(60);
           color: #757575;
           font-size: get-rem(13);
-          
+
           @media (max-width: $mobile-breakpoint) {
             width: get-rem(40);
             font-size: get-rem(11);
           }
         }
-        
+
         .value {
           flex: 1;
           color: #212121;
           font-size: get-rem(13);
-          
+
           @media (max-width: $mobile-breakpoint) {
             font-size: get-rem(11);
           }
         }
       }
     }
-    
+
     .flight-footer {
       margin-top: auto;
       padding-top: get-rem(12);
       display: flex;
       justify-content: flex-end;
       border-top: get-rem(1) solid #f0f0f0;
-      
+
       @media (max-width: $mobile-breakpoint) {
         padding-top: get-rem(6);
       }
-      
+
       .status-badge {
         background-color: #c8e6c9;
         color: #2e7d32;
@@ -290,7 +289,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
         border-radius: get-rem(12);
         font-size: get-rem(12);
         font-weight: 500;
-        
+
         @media (max-width: $mobile-breakpoint) {
           padding: get-rem(2) get-rem(6);
           font-size: get-rem(10);
