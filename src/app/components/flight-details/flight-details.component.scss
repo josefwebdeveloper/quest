@@ -9,7 +9,6 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   background-color: $primary-background;
   border-left: get-rem(1) solid $border-light;
 
