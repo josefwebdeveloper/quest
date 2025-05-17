@@ -87,8 +87,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         (data.to_date ?? '');
       return searchStr.toLowerCase().includes(filter);
     };
-
-    this.sortData(this.sortColumn);
   }
 
   ngAfterViewInit() {
@@ -233,8 +231,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private updateFlightsDisplay(data: Flight[]): void {
     this.flights.set(data);
     this.dataSource.data = data;
-
-    this.sortData(this.sortColumn);
 
     if (data.length > 0) {
       this.selectFlight(data[0]);
