@@ -2,7 +2,7 @@
   <div class="header">
     <h2>Flight Information</h2>
     @if (hasSelectedFlight()) {
-      <div class="flight-badge">{{ planeNumber() }}</div>
+      <div class="flight-badge">{{ flightNumber() }}</div>
     }
   </div>
   
@@ -21,30 +21,35 @@
         </div>
       </div>
       
-      <!-- Compact travel information -->
-      <div class="travel-info">
-        <div class="detail-section">
-          <div class="section-title">Origin</div>
-          <div class="detail-row">
-            <div class="label">City:</div>
-            <div class="value">{{ origin() }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Gate:</div>
-            <div class="value">{{ originGate() }}</div>
-          </div>
+      <!-- Plane information -->
+      <div class="plane-section">
+        <div class="section-label">Plane:</div>
+        <div class="plane-model">{{ planeNumber() }}</div>
+      </div>
+      
+      <!-- Origin section -->
+      <div class="travel-section">
+        <div class="section-label">Origin</div>
+        <div class="detail-row">
+          <div class="label">City:</div>
+          <div class="value">{{ origin() }}</div>
         </div>
-        
-        <div class="detail-section">
-          <div class="section-title">Destination</div>
-          <div class="detail-row">
-            <div class="label">City:</div>
-            <div class="value">{{ destination() }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Gate:</div>
-            <div class="value">{{ destinationGate() }}</div>
-          </div>
+        <div class="detail-row">
+          <div class="label">Gate:</div>
+          <div class="value">{{ originGate() }}</div>
+        </div>
+      </div>
+      
+      <!-- Destination section -->
+      <div class="travel-section">
+        <div class="section-label">Destination</div>
+        <div class="detail-row">
+          <div class="label">City:</div>
+          <div class="value">{{ destination() }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="label">Gate:</div>
+          <div class="value">{{ destinationGate() }}</div>
         </div>
       </div>
       

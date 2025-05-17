@@ -23,11 +23,11 @@
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
 
             <!-- Flight Number Column -->
-            <ng-container matColumnDef="plane">
-              <th mat-header-cell *matHeaderCellDef (click)="sortData('plane')" class="sortable-header">
-                Flight
+            <ng-container matColumnDef="num">
+              <th mat-header-cell *matHeaderCellDef (click)="sortData('num')" class="sortable-header">
+                Flight Number
                 <span class="sort-icon">
-                  @if (sortColumn === 'plane') {
+                  @if (sortColumn === 'num') {
                     @if (sortDirection === 'asc') {
                       ↑
                     } @else {
@@ -39,7 +39,7 @@
               <td mat-cell *matCellDef="let flight"
                   [class.selected-row]="isSelected(flight)"
                   (click)="selectFlight(flight)">
-                {{ flight.plane }}
+                {{ flight.num }}
               </td>
             </ng-container>
 
@@ -68,7 +68,7 @@
             <!-- Origin Date Column -->
             <ng-container matColumnDef="from_date">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('from_date')" class="sortable-header">
-                Date
+                Origin Date
                 <span class="sort-icon">
                   @if (sortColumn === 'from_date') {
                     @if (sortDirection === 'asc') {
@@ -111,7 +111,7 @@
             <!-- Destination Date Column -->
             <ng-container matColumnDef="to_date">
               <th mat-header-cell *matHeaderCellDef (click)="sortData('to_date')" class="sortable-header">
-                Date
+                Destination Date
                 <span class="sort-icon">
                   @if (sortColumn === 'to_date') {
                     @if (sortDirection === 'asc') {

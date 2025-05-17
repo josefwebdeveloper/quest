@@ -22,6 +22,7 @@ export class FlightDetailsComponent {
   selectedFlight = computed(() => this.flightService.selectedFlight());
   hasSelectedFlight = computed(() => !!this.selectedFlight());
 
+  flightNumber = computed(() => this.selectedFlight()?.num || 'N/A');
   planeNumber = computed(() => this.selectedFlight()?.plane || 'N/A');
   duration = computed(() => this.selectedFlight()?.duration || 0);
   originGate = computed(() => this.selectedFlight()?.from_gate || 'N/A');

@@ -85,6 +85,7 @@ export class WorkersListComponent implements OnInit, OnDestroy {
       return;
     }
     
+    this.flightService.setSelectedWorker(null);
     this.flightService.setSelectedWorker(worker);
     
     this.router.navigate(['/workers', worker.id]);

@@ -57,13 +57,13 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private flightsCache = new Map<number, Flight[]>();
   private lastFetchTime = new Map<number, number>();
 
-  displayedColumns: string[] = ['plane', 'from', 'from_date', 'to', 'to_date'];
-  mobileDisplayedColumns: string[] = ['plane', 'from', 'to'];
+  displayedColumns: string[] = ['num', 'from', 'from_date', 'to', 'to_date'];
+  mobileDisplayedColumns: string[] = ['num', 'from', 'to'];
   dataSource: MatTableDataSource<Flight> = new MatTableDataSource<Flight>([]);
 
   isMobile = signal<boolean>(false);
 
-  sortColumn = 'from_date';
+  sortColumn = 'num';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   flights = signal<Flight[]>([]);
@@ -170,6 +170,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       if (selectedWorker) {
         this.flightsCache.delete(selectedWorker.id);
         this.flightService.clearFlightsCache(selectedWorker.id);
+        this.flightService.setSelectedFlight(null);
         this.loadFlights(selectedWorker.id);
         this.startRefreshTimer();
       } else {
@@ -211,6 +212,9 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
           if (hasDataChanged) {
             this.updateFlightsDisplay(data);
           } else {
+            if (data.length > 0 && !this.flightService.selectedFlight()) {
+              this.selectFlight(data[0]);
+            }
             this.isLoading.set(false);
             this.cdr.detectChanges();
           }
@@ -232,7 +236,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.sortData(this.sortColumn);
 
-    if (data.length > 0 && !this.flightService.selectedFlight()) {
+    if (data.length > 0) {
       this.selectFlight(data[0]);
     }
 

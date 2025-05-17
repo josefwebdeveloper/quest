@@ -104,7 +104,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
   }
 
   .details-container {
-    padding: get-rem(12) get-rem(16);
+    padding: get-rem(16) get-rem(20);
     margin: 0 get-rem(12) get-rem(12);
     border-radius: get-rem(8);
     background-color: $background-color;
@@ -116,12 +116,12 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     overflow: auto;
 
     @media (max-width: $mobile-breakpoint) {
-      padding: get-rem(8) get-rem(10);
+      padding: get-rem(12) get-rem(16);
       margin: 0 get-rem(6) get-rem(6);
     }
 
     @media (max-width: $small-mobile-breakpoint) {
-      padding: get-rem(6) get-rem(8);
+      padding: get-rem(8) get-rem(12);
       margin: 0 get-rem(4) get-rem(4);
     }
 
@@ -144,56 +144,59 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     }
 
     .flight-summary {
-      margin-bottom: get-rem(16);
+      margin-bottom: get-rem(24);
       display: flex;
       justify-content: center;
 
       @media (max-width: $mobile-breakpoint) {
-        margin-bottom: get-rem(8);
+        margin-bottom: get-rem(16);
       }
 
       @media (max-width: $small-mobile-breakpoint) {
-        margin-bottom: get-rem(6);
+        margin-bottom: get-rem(12);
       }
 
       .duration-indicator {
         text-align: center;
-        padding: get-rem(12) get-rem(16);
+        padding: get-rem(16) get-rem(24);
         background-color: $success-background;
         border-radius: get-rem(8);
         color: $primary-dark;
+        min-width: get-rem(140);
 
         @media (max-width: $mobile-breakpoint) {
-          padding: get-rem(8) get-rem(10);
+          padding: get-rem(12) get-rem(16);
           border-radius: get-rem(6);
+          min-width: get-rem(120);
         }
 
         @media (max-width: $small-mobile-breakpoint) {
-          padding: get-rem(6) get-rem(8);
+          padding: get-rem(10) get-rem(12);
+          min-width: get-rem(100);
         }
 
         .duration-value {
-          font-size: get-rem(20);
+          font-size: get-rem(24);
           font-weight: 500;
 
           @media (max-width: $mobile-breakpoint) {
-            font-size: get-rem(16);
+            font-size: get-rem(20);
           }
 
           @media (max-width: $small-mobile-breakpoint) {
-            font-size: get-rem(15);
+            font-size: get-rem(18);
           }
         }
 
         .duration-label {
-          font-size: get-rem(11);
+          font-size: get-rem(12);
           text-transform: uppercase;
           letter-spacing: get-rem(0.5);
           margin-top: get-rem(4);
           color: $primary-color;
 
           @media (max-width: $mobile-breakpoint) {
-            font-size: get-rem(9);
+            font-size: get-rem(10);
             margin-top: get-rem(2);
             letter-spacing: get-rem(0.3);
           }
@@ -201,40 +204,59 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       }
     }
 
-    .travel-info {
+    // Plane section
+    .plane-section {
       display: flex;
       flex-direction: column;
+      margin-bottom: get-rem(24);
+      border-bottom: get-rem(1) solid $border-light;
+      padding-bottom: get-rem(16);
 
       @media (max-width: $mobile-breakpoint) {
-        flex-direction: row;
-        margin: 0 get-rem(-4);
+        margin-bottom: get-rem(16);
+        padding-bottom: get-rem(12);
+      }
 
-        .detail-section {
-          flex: 1;
-          margin: 0 get-rem(4);
-          min-width: 0;
-        }
+      .section-label {
+        font-weight: 500;
+        color: $text-dark;
+        margin-bottom: get-rem(4);
+        font-size: get-rem(16);
+      }
+
+      .plane-model {
+        font-size: get-rem(18);
+        color: $primary-dark;
+        font-weight: 500;
       }
     }
 
-    .detail-section {
-      margin-bottom: get-rem(12);
+    // Travel sections (Origin and Destination)
+    .travel-section {
+      margin-bottom: get-rem(16);
+      padding-bottom: get-rem(16);
+      border-bottom: get-rem(1) solid $border-light;
 
-      @media (max-width: $mobile-breakpoint) {
-        margin-bottom: get-rem(6);
+      &:last-of-type {
+        border-bottom: none;
+        padding-bottom: 0;
       }
 
-      .section-title {
+      @media (max-width: $mobile-breakpoint) {
+        margin-bottom: get-rem(12);
+        padding-bottom: get-rem(12);
+      }
+
+      .section-label {
         font-weight: 500;
         color: $text-dark;
-        margin-bottom: get-rem(6);
-        font-size: get-rem(14);
-        border-bottom: get-rem(1) solid $background-lightest;
-        padding-bottom: get-rem(3);
+        margin-bottom: get-rem(8);
+        font-size: get-rem(16);
+        padding-bottom: get-rem(4);
 
         @media (max-width: $mobile-breakpoint) {
-          font-size: get-rem(12);
-          margin-bottom: get-rem(4);
+          font-size: get-rem(14);
+          margin-bottom: get-rem(6);
           padding-bottom: get-rem(2);
         }
       }
@@ -242,6 +264,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       .detail-row {
         display: flex;
         padding: get-rem(4) 0;
+        margin-left: get-rem(8);
 
         @media (max-width: $mobile-breakpoint) {
           padding: get-rem(2) 0;
@@ -251,21 +274,21 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
           font-weight: 500;
           width: get-rem(60);
           color: #757575;
-          font-size: get-rem(13);
+          font-size: get-rem(14);
 
           @media (max-width: $mobile-breakpoint) {
             width: get-rem(40);
-            font-size: get-rem(11);
+            font-size: get-rem(12);
           }
         }
 
         .value {
           flex: 1;
           color: #212121;
-          font-size: get-rem(13);
+          font-size: get-rem(14);
 
           @media (max-width: $mobile-breakpoint) {
-            font-size: get-rem(11);
+            font-size: get-rem(12);
           }
         }
       }
@@ -285,15 +308,15 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       .status-badge {
         background-color: #c8e6c9;
         color: #2e7d32;
-        padding: get-rem(3) get-rem(10);
-        border-radius: get-rem(12);
-        font-size: get-rem(12);
+        padding: get-rem(4) get-rem(16);
+        border-radius: get-rem(16);
+        font-size: get-rem(14);
         font-weight: 500;
 
         @media (max-width: $mobile-breakpoint) {
-          padding: get-rem(2) get-rem(6);
-          font-size: get-rem(10);
-          border-radius: get-rem(10);
+          padding: get-rem(3) get-rem(12);
+          font-size: get-rem(12);
+          border-radius: get-rem(12);
         }
       }
     }
