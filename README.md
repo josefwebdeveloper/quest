@@ -83,6 +83,20 @@ The build artifacts will be stored in the `dist/` directory.
 - Flight filtering and sorting capabilities
 - Responsive layout for desktop and mobile devices
 
+## Mobile Version Implementation
+
+The application features a fully responsive design optimized for mobile devices:
+
+- Adaptive layout that rearranges components based on screen size
+- Mobile-optimized table with simplified columns for smaller screens
+- Touch-friendly interface elements and appropriate spacing
+- Breakpoint detection to adjust UI components dynamically
+- Adjusted typography and component sizing for better readability on small screens
+- Single-column layout on narrow screens for better usability
+- Optimized flight details panel for mobile viewing
+
+The mobile implementation uses Angular's built-in responsive tools and Material Design's responsive components, along with custom CSS media queries to ensure a seamless experience across all device sizes.
+
 ## Project Structure
 
 - `src/app/components/` - Application components
