@@ -299,7 +299,6 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       padding-top: get-rem(12);
       display: flex;
       justify-content: flex-end;
-      border-top: get-rem(1) solid #f0f0f0;
 
       @media (max-width: $mobile-breakpoint) {
         padding-top: get-rem(6);
