@@ -10,7 +10,7 @@ import {
   ChangeDetectorRef,
   AfterViewInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Flight } from '../../shared/models/flight.model';
@@ -30,7 +30,6 @@ import { LoaderService } from '../../shared/services/loader.service';
   selector: 'app-flights-table',
   standalone: true,
   imports: [
-    CommonModule,
     MatTableModule,
     MatInputModule,
     MatFormFieldModule,
@@ -38,8 +37,8 @@ import { LoaderService } from '../../shared/services/loader.service';
     MatProgressSpinnerModule,
     MatButtonModule,
     FormsModule,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
   templateUrl: './flights-table.component.html',
   styleUrls: ['./flights-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

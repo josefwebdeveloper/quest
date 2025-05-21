@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../shared/services/flight.service';
 import { Worker } from '../../shared/models/worker.model';
@@ -9,7 +9,7 @@ import { LoaderService } from '../../shared/services/loader.service';
 @Component({
   selector: 'app-workers-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './workers-list.component.html',
   styleUrls: ['./workers-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

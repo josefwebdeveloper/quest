@@ -1,17 +1,19 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoaderService } from '../../services/loader.service';
 
 @Component({
   selector: 'app-loader',
   standalone: true,
-  imports: [CommonModule, MatProgressSpinnerModule],
+  imports: [MatProgressSpinnerModule],
   template: `
-    <div *ngIf="loaderService.isLoading()" class="loader-container">
-      <mat-spinner></mat-spinner>
-    </div>
-  `,
+    @if (loaderService.isLoading()) {
+      <div class="loader-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+    `,
   styles: [`
     .loader-container {
       position: fixed;

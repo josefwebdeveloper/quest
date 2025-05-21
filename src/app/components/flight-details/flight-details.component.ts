@@ -4,14 +4,14 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FlightService } from '../../shared/services/flight.service';
 import { DurationPipe } from '../../shared/pipes/duration.pipe';
 
 @Component({
   selector: 'app-flight-details',
   standalone: true,
-  imports: [CommonModule, DurationPipe],
+  imports: [DurationPipe],
   templateUrl: './flight-details.component.html',
   styleUrls: ['./flight-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
