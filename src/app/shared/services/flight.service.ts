@@ -79,7 +79,7 @@ export class FlightService {
         }),
         tap((flights) => {
           this.flightsCache.set(workerId, flights);
-          setTimeout(() => this.flightRequests.delete(workerId), 0);
+          this.flightRequests.delete(workerId);
         }),
         shareReplay(1),
         catchError((error) => {
@@ -98,8 +98,10 @@ export class FlightService {
   clearFlightsCache(workerId?: number): void {
     if (workerId !== undefined) {
       this.flightsCache.delete(workerId);
+      this.flightRequests.delete(workerId);
     } else {
       this.flightsCache.clear();
+      this.flightRequests.clear();
     }
   }
 

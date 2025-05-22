@@ -37,8 +37,8 @@ import { LoaderService } from '../../shared/services/loader.service';
     MatProgressSpinnerModule,
     MatButtonModule,
     FormsModule,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+  ],
   templateUrl: './flights-table.component.html',
   styleUrls: ['./flights-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,9 +52,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$ = new Subject<void>();
 
   private timerSubscription: Subscription | null = null;
-
-  private flightsCache = new Map<number, Flight[]>();
-  private lastFetchTime = new Map<number, number>();
 
   displayedColumns: string[] = ['num', 'from', 'from_date', 'to', 'to_date'];
   mobileDisplayedColumns: string[] = ['num', 'from', 'to'];
@@ -165,7 +162,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     effect(() => {
       const selectedWorker = this.flightService.selectedWorker();
       if (selectedWorker) {
-        this.flightsCache.delete(selectedWorker.id);
         this.flightService.clearFlightsCache(selectedWorker.id);
         this.flightService.setSelectedFlight(null);
         this.loadFlights(selectedWorker.id);
@@ -191,19 +187,19 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   loadFlights(workerId: number): void {
-    const currentTime = Date.now();
+    this.fetchAndProcessFlights(workerId);
+  }
 
+  private fetchAndProcessFlights(workerId: number): void {
     this.isLoading.set(true);
     this.loaderService.show();
+    this.flightService.clearError();
 
     this.flightService
       .getFlightsByWorkerId(workerId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          this.flightsCache.set(workerId, [...data]);
-          this.lastFetchTime.set(workerId, currentTime);
-
           const hasDataChanged = this.haveFlightsChanged(data, this.flights());
 
           if (hasDataChanged) {
@@ -215,7 +211,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isLoading.set(false);
             this.cdr.detectChanges();
           }
-
           this.loaderService.hide();
         },
         error: (err) => {
@@ -243,15 +238,19 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     newFlights: Flight[],
     currentFlights: Flight[],
   ): boolean {
+    console.log('Comparing flights');
     if (newFlights.length !== currentFlights.length) {
+      console.log('Flight count changed');
       return true;
     }
 
     const currentFlightsMap = new Map(
       currentFlights.map((flight) => [flight.id, flight]),
     );
+    console.log('Current flights map:', currentFlightsMap);
 
     for (const newFlight of newFlights) {
+      console.log('Checking flight:', newFlight);
       const currentFlight = currentFlightsMap.get(newFlight.id);
 
       if (
@@ -306,32 +305,35 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.stopRefreshTimer();
 
     let refreshInProgress = false;
-
+    console.log('Starting refresh timer');
     this.timerSubscription = interval(60000)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         const workerId = this.flightService.selectedWorker()?.id;
 
         if (workerId && !refreshInProgress) {
+          console.log('Refreshing flights for worker:', workerId);
           refreshInProgress = true;
 
           this.flightService.clearFlightsCache(workerId);
+
+          this.isLoading.set(true);
 
           this.flightService
             .getFlightsByWorkerId(workerId)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
               next: (data) => {
-                this.flightsCache.set(workerId, [...data]);
-                this.lastFetchTime.set(workerId, Date.now());
-
                 const hasDataChanged = this.haveFlightsChanged(
                   data,
                   this.flights(),
                 );
+
                 if (hasDataChanged) {
+                  console.log('Data changed during refresh, updating display');
                   this.updateFlightsDisplay(data);
                 } else {
+                  console.log('No data change during refresh.');
                   this.isLoading.set(false);
                 }
 
