@@ -1,0 +1,57 @@
+<div class="flight-details">
+  <div class="header">
+    <h2>Flight Information</h2>
+    @if (hasSelectedFlight()) {
+      <div class="flight-badge">{{ flightNumber() }}</div>
+    }
+  </div>
+
+  @if (!hasSelectedFlight()) {
+    <div class="no-flight">
+      <div class="icon">✈️</div>
+      <p>Select a flight to view details</p>
+    </div>
+  } @else {
+    <div class="details-container">
+      <div class="flight-summary">
+        <div class="duration-indicator">
+          <div class="duration-value">{{ duration() | duration }}</div>
+          <div class="duration-label">FLIGHT DURATION</div>
+        </div>
+      </div>
+
+      <div class="plane-section">
+        <div class="section-label">Plane:</div>
+        <div class="plane-model">{{ planeNumber() }}</div>
+      </div>
+
+      <div class="travel-section">
+        <div class="section-label">Origin</div>
+        <div class="detail-row">
+          <div class="label">City:</div>
+          <div class="value">{{ origin() }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="label">Gate:</div>
+          <div class="value">{{ originGate() }}</div>
+        </div>
+      </div>
+
+      <div class="travel-section">
+        <div class="section-label">Destination</div>
+        <div class="detail-row">
+          <div class="label">City:</div>
+          <div class="value">{{ destination() }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="label">Gate:</div>
+          <div class="value">{{ destinationGate() }}</div>
+        </div>
+      </div>
+
+      <div class="flight-footer">
+        <div class="status-badge">On Time</div>
+      </div>
+    </div>
+  }
+</div>

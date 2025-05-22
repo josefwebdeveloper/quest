@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+@use "../public/assets/styles/variables" as *;
+@use "../public/assets/styles/functions" as *;
+
+// Use functions
+@function get-rem($pixels) {
+  @return get-rem($pixels);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+
+html, body { 
+  height: 100%; 
+  overflow: hidden;
+  background-color: var(--background-light);
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  line-height: 1.4;
+  color: $text-color;
+}
+
+// Angular Component styles
+app-root {
+  display: block;
+  height: 100%;
+}
+
+router-outlet + * {
+  display: block;
+  height: 100%;
+}

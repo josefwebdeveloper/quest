@@ -1,59 +1,122 @@
-# Quest
+# Worker Flights Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
+A lightweight Angular application for displaying and managing worker flight information. The application provides an intuitive interface for viewing flights associated with workers.
 
-## Development server
+## Prerequisites
 
-To start a local development server, run:
+- Node.js (v16.x or later)
+- npm (v7.x or later)
+- Angular CLI (`npm install -g @angular/cli`)
+
+## Installation
+
+1. Clone this repository
+   ```bash
+   git clone <repository-url>
+   cd quest
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+## Running the Application
+
+### Development Server
+
+Run the development server with:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/` in your browser. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+For mobile testing, you can make the server accessible on your local network:
 
 ```bash
-ng generate component component-name
+ng serve --host 0.0.0.0
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Running with API proxy
+
+The application uses a proxy configuration to avoid CORS issues:
 
 ```bash
-ng generate --help
+ng serve --proxy-config proxy.conf.json
 ```
 
-## Building
+This proxy configuration routes API requests through the Angular development server, avoiding CORS restrictions without requiring backend changes. For production deployment, ensure either proper CORS headers are set on the API server or maintain a similar proxy configuration on the production server.
 
-To build the project run:
+## Building for Production
+
+Build the project for production:
 
 ```bash
-ng build
+ng build --configuration production
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## Project Features
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Core Functionality
+- Worker selection with automatic selection of the first flight in the list
+- Flight information table with sortable columns:
+  - Flight Number
+  - Origin
+  - Origin Date
+  - Destination
+  - Destination Date
+- Detailed flight information panel showing:
+  - Flight duration
+  - Plane model information
+  - Origin/destination cities and gates
+  - Flight status
 
-```bash
-ng test
-```
+### Technical Features
+- Built with Angular and Material UI components for a responsive design
+- Implemented 60-second interval refresh for real-time flight data updates
+- Smart UI optimization that prevents unnecessary re-rendering when API responses contain unchanged data
+- Efficient data handling with caching to reduce API calls
+- Flight filtering and sorting capabilities
+- Responsive layout for desktop and mobile devices
 
-## Running end-to-end tests
+## Mobile Version Implementation
 
-For end-to-end (e2e) testing, run:
+The application features a fully responsive design optimized for mobile devices:
 
-```bash
-ng e2e
-```
+- Adaptive layout that rearranges components based on screen size
+- Mobile-optimized table with simplified columns for smaller screens
+- Touch-friendly interface elements and appropriate spacing
+- Breakpoint detection to adjust UI components dynamically
+- Adjusted typography and component sizing for better readability on small screens
+- Single-column layout on narrow screens for better usability
+- Optimized flight details panel for mobile viewing
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The mobile implementation uses Angular's built-in responsive tools and Material Design's responsive components, along with custom CSS media queries to ensure a seamless experience across all device sizes.
 
-## Additional Resources
+## Project Structure
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `src/app/components/` - Application components
+  - `workers-list/` - Worker selection component
+  - `flights-table/` - Flight information table
+  - `flight-details/` - Detailed flight information panel
+- `src/app/shared/` - Shared services, models, and utilities
+  - `services/` - API and utility services
+  - `models/` - Type definitions
+  - `pipes/` - Custom data transformation pipes
+- `src/app/pages/` - Page-level components
+- `public/assets/` - Static assets and styles
+
+## Performance Optimizations
+
+- Change detection strategy is set to OnPush for better performance
+- Smart data fetching with caching mechanism to reduce API calls
+- Differential updating to prevent UI re-rendering when flight data hasn't changed
+- Automatic refresh on a 60-second interval with checks to prevent redundant UI updates
+
+## Deployment
+
+To deploy the application, copy the contents of the `dist/` directory to your web server of choice after building for production.

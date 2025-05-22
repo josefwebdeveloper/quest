@@ -1,0 +1,124 @@
+@use "../../../../public/assets/styles/functions" as *;
+@use "../../../../public/assets/styles/variables" as *;
+
+// Breakpoints
+$mobile-breakpoint: $mobile-breakpoint;
+$small-mobile-breakpoint: $small-mobile-breakpoint;
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  
+  header {
+    background: linear-gradient(to right, $primary-gradient-start, $primary-gradient-end);
+    color: white;
+    padding: get-rem(12);
+    box-shadow: 0 get-rem(2) get-rem(4) $shadow-color-medium;
+    z-index: 10;
+    height: get-rem(48);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    h1 {
+      margin: 0;
+      font-size: get-rem(18);
+      font-weight: 500;
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        font-size: get-rem(16);
+      }
+    }
+  }
+  
+  main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .app-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    
+    @media (max-width: $mobile-breakpoint) {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: get-rem(250);
+      background-color: $primary-background;
+      border-right: 1px solid $primary-border;
+      box-shadow: get-rem(2) 0 get-rem(5) $shadow-color;
+      z-index: 5;
+      overflow: hidden;
+      
+      @media (max-width: $mobile-breakpoint) {
+        width: 100%;
+        height: get-rem(120);
+        min-height: get-rem(120);
+        border-right: none;
+        border-bottom: 1px solid $primary-border;
+      }
+      
+      @media (max-width: $small-mobile-breakpoint) {
+        height: get-rem(110);
+        min-height: get-rem(110);
+      }
+    }
+    
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding-top: 0;
+      
+      .flights-container {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        margin-top: 0;
+        
+        @media (max-width: $mobile-breakpoint) {
+          flex-direction: column;
+        }
+        
+        app-flights-table {
+          flex: 3;
+          min-width: 0;
+          overflow: hidden;
+          
+          @media (max-width: $mobile-breakpoint) {
+            flex: 1;
+            min-height: get-rem(350);
+          }
+        }
+        
+        app-flight-details {
+          flex: 1;
+          min-width: get-rem(350);
+          max-width: get-rem(380);
+          overflow: hidden;
+          
+          @media (max-width: $mobile-breakpoint) {
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+            height: get-rem(300);
+            min-height: get-rem(300);
+          }
+          
+          @media (max-width: $small-mobile-breakpoint) {
+            height: get-rem(280);
+            min-height: get-rem(280);
+          }
+        }
+      }
+    }
+  }
+} 
