@@ -48,6 +48,18 @@ $shadow-color: rgba(0, 0, 0, 0.05);
 $shadow-color-medium: rgba(0, 0, 0, 0.1);
 $shadow-color-dark: rgba(0, 0, 0, 0.12);
 
+// Table specific colors - added for flights-table and general table usage
+$white: #ffffff;
+$table-header-background: #e8eaf6;
+$table-header-border-color: #c5cae9;
+$table-row-even-background: #f8faff;
+$table-cell-border-color: #e3f2fd;
+$table-cell-text-color: #37474f;
+$table-cell-flight-num-color: #1a237e;
+$table-cell-date-text-color: #546e7a;
+$mobile-date-text-color: #78909c;
+$status-indicator-blue: #2196f3;
+
 // Spacing
 $spacing-xs: 4px;
 $spacing-sm: 8px;

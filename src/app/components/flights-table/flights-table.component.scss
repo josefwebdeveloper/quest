@@ -5,6 +5,8 @@
 $mobile-breakpoint: $mobile-breakpoint;
 $small-mobile-breakpoint: $small-mobile-breakpoint;
 
+// Local definitions removed, using global variables from _variables.scss
+
 .flights-table {
   height: 100%;
   display: flex;
@@ -34,7 +36,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
 
   mat-card-header {
     background: linear-gradient(45deg, $primary-gradient-start, $primary-gradient-end);
-    color: white;
+    color: $white;
     padding: get-rem(12) get-rem(16);
     border-radius: get-rem(8) get-rem(8) 0 0;
     min-height: get-rem(56);
@@ -223,17 +225,17 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
 
     th.mat-header-cell {
       font-weight: 600;
-      background-color: #e8eaf6;
+      background-color: $table-header-background;
       color: $accent-blue;
       padding: get-rem(10) get-rem(12);
       position: sticky;
       top: 0;
       z-index: 10;
-      border-bottom: get-rem(2) solid #c5cae9;
+      border-bottom: get-rem(2) solid $table-header-border-color;
       text-transform: uppercase;
       font-size: get-rem(11);
       letter-spacing: get-rem(0.5);
-      height: get-rem(42);
+      height: get-rem(48);
       text-align: left;
 
       @media (max-width: $mobile-breakpoint) {
@@ -258,7 +260,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       position: relative;
 
       &:hover {
-        background-color: #f5f7ff;
+        background-color: $accent-indigo-light;
       }
 
       &.selected-row {
@@ -277,10 +279,10 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
       }
 
       &:nth-child(even) {
-        background-color: #f8faff;
+        background-color: $table-row-even-background;
 
         &:hover {
-          background-color: #f5f7ff;
+          background-color: $accent-indigo-light;
         }
 
         &.selected-row {
@@ -291,11 +293,11 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
 
     .mat-cell {
       padding: get-rem(12) get-rem(16);
-      border-bottom: get-rem(1) solid #e3f2fd;
+      border-bottom: get-rem(1) solid $table-cell-border-color;
       font-size: get-rem(13);
       height: get-rem(60);
       line-height: 1.3;
-      color: #37474f;
+      color: $table-cell-text-color;
       font-weight: 400;
 
       @media (max-width: $mobile-breakpoint) {
@@ -306,7 +308,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
 
       .mobile-date {
         font-size: get-rem(10);
-        color: #78909c;
+        color: $mobile-date-text-color;
         margin-top: get-rem(4);
         font-family: 'Roboto Mono', monospace;
       }
@@ -315,7 +317,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
     td.mat-cell:first-of-type {
       padding-left: get-rem(16);
       font-weight: 500;
-      color: #1a237e;
+      color: $table-cell-flight-num-color;
       letter-spacing: 0.3px;
     }
 
@@ -325,7 +327,7 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
 
     // Styling for Origin and Destination dates
     tr td:nth-child(3), tr td:nth-child(5) {
-      color: #546e7a;
+      color: $table-cell-date-text-color;
       font-family: 'Roboto Mono', monospace;
       letter-spacing: -0.3px;
     }
@@ -337,11 +339,11 @@ $small-mobile-breakpoint: $small-mobile-breakpoint;
 
     // Alternate flight status colors
     tr:nth-child(3n) td:first-child::before {
-      background-color: #2196f3;
+      background-color: $status-indicator-blue;
     }
 
     tr:nth-child(5n) td:first-child::before {
-      background-color: #ff9800;
+      background-color: $warning-light;
     }
   }
 }
