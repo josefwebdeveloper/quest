@@ -76,6 +76,7 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.dataSource.filterPredicate = (data: Flight, filter: string) => {
       const searchStr =
+        (data.num ?? '') +
         (data.plane ?? '') +
         (data.from ?? '') +
         (data.from_date ?? '') +
