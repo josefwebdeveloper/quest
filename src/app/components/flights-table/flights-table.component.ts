@@ -210,7 +210,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
               this.selectFlight(data[0]);
             }
             this.isLoading.set(false);
-            this.cdr.detectChanges();
           }
           this.loaderService.hide();
         },
