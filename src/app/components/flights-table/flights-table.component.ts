@@ -238,19 +238,15 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     newFlights: Flight[],
     currentFlights: Flight[],
   ): boolean {
-    console.log('Comparing flights');
     if (newFlights.length !== currentFlights.length) {
-      console.log('Flight count changed');
       return true;
     }
 
     const currentFlightsMap = new Map(
       currentFlights.map((flight) => [flight.id, flight]),
     );
-    console.log('Current flights map:', currentFlightsMap);
 
     for (const newFlight of newFlights) {
-      console.log('Checking flight:', newFlight);
       const currentFlight = currentFlightsMap.get(newFlight.id);
 
       if (
@@ -281,7 +277,6 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectFlight(flight: Flight): void {
     if (!flight || !flight.id) {
-      console.warn('Attempted to select an invalid flight');
       return;
     }
 
@@ -305,14 +300,12 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.stopRefreshTimer();
 
     let refreshInProgress = false;
-    console.log('Starting refresh timer');
     this.timerSubscription = interval(60000)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         const workerId = this.flightService.selectedWorker()?.id;
 
         if (workerId && !refreshInProgress) {
-          console.log('Refreshing flights for worker:', workerId);
           refreshInProgress = true;
 
           this.flightService.clearFlightsCache(workerId);
@@ -330,10 +323,8 @@ export class FlightsTableComponent implements OnInit, OnDestroy, AfterViewInit {
                 );
 
                 if (hasDataChanged) {
-                  console.log('Data changed during refresh, updating display');
                   this.updateFlightsDisplay(data);
                 } else {
-                  console.log('No data change during refresh.');
                   this.isLoading.set(false);
                 }
 
